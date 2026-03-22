@@ -1,0 +1,98 @@
+{% load static %}
+<nav class="navbar">
+    <div class="container">
+
+        <!-- LEFT -->
+        <div class="navbar-brand">
+            <a href="{% url 'shop:index' %}">
+                <i class="fas fa-dragon"></i>
+                <span>AnimeStreet</span>
+            </a>
+        </div>
+
+        <!-- CENTER (SEARCH ONLY) -->
+        <div class="navbar-center">
+            <div class="search-box">
+                <input type="text" id="globalSearchInput" placeholder="Search products...">
+                <button id="globalSearchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="navbar-right">
+
+            <!-- MENU -->
+            <a href="{% url 'shop:index' %}" class="nav-link">Home</a>
+            <a href="{% url 'shop:fashion' %}" class="nav-link">Fashion</a>
+            <a href="{% url 'shop:watches' %}" class="nav-link">Watches</a>
+            <a href="{% url 'shop:bags' %}" class="nav-link">Bags</a>
+
+            <!-- ICONS -->
+            <a href="{% url 'shop:wishlist' %}" class="action-icon">
+                <i class="fas fa-heart"></i>
+            </a>
+
+            <a href="{% url 'shop:cart' %}" class="action-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'shop:profile' %}" class="action-icon">
+                <i class="fas fa-user"></i>
+            </a>
+            {% else %}
+            <a href="{% url 'shop:login' %}" class="action-icon">
+                <i class="fas fa-user"></i>
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+</nav>
+
+<script>
+    // Highlight current page in navbar
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPath || (currentPath === '/' && href === '/')) {
+                link.classList.add('active');
+            }
+        });
+
+        // Setup search functionality
+        const searchInput = document.getElementById('globalSearchInput');
+        const searchBtn = document.getElementById('globalSearchBtn');
+
+        if (searchInput && searchBtn) {
+            const performSearch = () => {
+                const query = searchInput.value.trim();
+                if (query) {
+                    sessionStorage.setItem('searchQuery', query);
+                    window.location.href = '/';
+                }
+            };
+
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        // Update cart and wishlist counts
+        if (typeof updateCartCount === 'function') {
+            updateCartCount();
+        }
+        if (typeof updateWishlistCount === 'function') {
+            updateWishlistCount();
+        }
+    });
+</script>

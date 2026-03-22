@@ -1,0 +1,377 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Anime Fashion - Tshirts & Hoodies | AnimeStreet{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1>Anime Fashion</h1>
+        <p>Discover our collection of anime t-shirts and hoodies</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <label>Sort by:</label>
+            <select id="sortBy">
+                <option value="default">Default</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="popular">Most Popular</option>
+                <option value="rating">Top Rated</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label>Category:</label>
+            <div class="category-buttons">
+                <button class="category-btn active" data-type="all">All</button>
+                <button class="category-btn" data-type="tshirt">T-Shirts</button>
+                <button class="category-btn" data-type="hoodie">Hoodies</button>
+            </div>
+        </div>
+
+        <button class="btn-reset" id="resetFilters">Reset Filters</button>
+    </div>
+
+    <!-- Products Header -->
+    <div class="products-header">
+        <h2>Fashion Collection</h2>
+        <p id="productsCount">Showing {{ products|length }} products</p>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" id="fashionProductsGrid">
+        {% for product in products %}
+        <div class="product-card" data-id="{{ product.product_id }}" data-category="{{ product.sub_category }}">
+            <div class="product-image">
+                {% if product.image %}
+               <img src="{% static product.image %}" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static product.image %}" alt="{{ product.name }}">
+                {% endif %}
+                {% if product.featured %}
+                <span class="product-badge">Featured</span>
+                {% endif %}
+                <button class="wishlist-btn" data-id="{{ product.product_id }}">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
+            <div class="product-info">
+                <div class="product-category">{{ product.type|default:product.sub_category|upper }}</div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <div class="product-rating">
+                    <span class="stars">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= product.rating %}
+                                <i class="fas fa-star"></i>
+                            {% elif forloop.counter|add:"-0.5" <= product.rating %}
+                                <i class="fas fa-star-half-alt"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    <span class="reviews">({{ product.reviews }})</span>
+                </div>
+                <div class="product-price">₹{{ product.price|floatformat:0 }}</div>
+                
+                <!-- Size Selector -->
+                {% if product.sizes %}
+                <div class="size-selector">
+                    <span class="size-label">Size:</span>
+                    <div class="size-options">
+                        {% for size in product.sizes %}
+                        <button class="size-btn" data-size="{{ size }}">{{ size }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <button class="add-to-cart-btn" data-id="{{ product.product_id }}">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Fashion page specific JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all products
+        const products = Array.from(document.querySelectorAll('.product-card'));
+        const productsGrid = document.getElementById('fashionProductsGrid');
+        const productsCount = document.getElementById('productsCount');
+        const sortSelect = document.getElementById('sortBy');
+        const resetBtn = document.getElementById('resetFilters');
+        
+        let currentType = 'all';
+        let currentSort = 'default';
+        
+        // Filter products by type
+        function filterByType(productsList, type) {
+            if (type === 'all') return productsList;
+            return productsList.filter(product => {
+                const category = product.dataset.category;
+                return category === type;
+            });
+        }
+        
+        // Sort products
+        function sortProducts(productsList, sortBy) {
+            const sorted = [...productsList];
+            
+            switch(sortBy) {
+                case 'price-low':
+                    return sorted.sort((a, b) => {
+                        const priceA = parseFloat(a.querySelector('.product-price').textContent.replace('₹', ''));
+                        const priceB = parseFloat(b.querySelector('.product-price').textContent.replace('₹', ''));
+                        return priceA - priceB;
+                    });
+                case 'price-high':
+                    return sorted.sort((a, b) => {
+                        const priceA = parseFloat(a.querySelector('.product-price').textContent.replace('₹', ''));
+                        const priceB = parseFloat(b.querySelector('.product-price').textContent.replace('₹', ''));
+                        return priceB - priceA;
+                    });
+                default:
+                    return sorted;
+            }
+        }
+        
+        // Render products
+        function renderProducts() {
+            let filtered = filterByType(products, currentType);
+            filtered = sortProducts(filtered, currentSort);
+            
+            // Update count
+            if (productsCount) {
+                productsCount.textContent = `Showing ${filtered.length} products`;
+            }
+            
+            // Reorder grid
+            if (productsGrid && filtered.length > 0) {
+                productsGrid.innerHTML = '';
+                filtered.forEach(product => {
+                    productsGrid.appendChild(product.cloneNode(true));
+                });
+                
+                // Reattach event listeners
+                attachEventListeners();
+            }
+            
+            if (filtered.length === 0 && productsGrid) {
+                productsGrid.innerHTML = '<div class="no-products">No products found</div>';
+            }
+        }
+        
+        // Attach event listeners to buttons
+        function attachEventListeners() {
+            // Add to cart buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.removeEventListener('click', handleAddToCart);
+                btn.addEventListener('click', handleAddToCart);
+            });
+            
+            // Wishlist buttons
+            document.querySelectorAll('.wishlist-btn').forEach(btn => {
+                btn.removeEventListener('click', handleWishlist);
+                btn.addEventListener('click', handleWishlist);
+            });
+            
+            // Size buttons
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.removeEventListener('click', handleSizeSelect);
+                btn.addEventListener('click', handleSizeSelect);
+            });
+        }
+        
+        // Handle add to cart
+        function handleAddToCart(event) {
+            event.stopPropagation();
+            const btn = event.currentTarget;
+            const productCard = btn.closest('.product-card');
+            const productId = productCard.dataset.id;
+            const sizeBtn = productCard.querySelector('.size-btn.active');
+            const size = sizeBtn ? sizeBtn.dataset.size : 'M';
+            
+            addToCart(productId, size);
+        }
+        
+        // Handle wishlist
+        function handleWishlist(event) {
+            event.stopPropagation();
+            const btn = event.currentTarget;
+            const productCard = btn.closest('.product-card');
+            const productId = productCard.dataset.id;
+            
+            toggleWishlist(productId, btn);
+        }
+        
+        // Handle size selection
+        function handleSizeSelect(event) {
+            const btn = event.currentTarget;
+            const container = btn.closest('.size-options');
+            container.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        
+        // Add to cart API call
+        async function addToCart(productId, size) {
+            try {
+                const response = await fetch('/api/add-to-cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        product_id: parseInt(productId),
+                        size: size,
+                        quantity: 1
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    // Update cart count
+                    if (window.cartCount !== undefined) {
+                        window.cartCount = data.cart_count;
+                        const cartBadge = document.getElementById('cartCount');
+                        if (cartBadge) {
+                            cartBadge.textContent = data.cart_count;
+                        }
+                    }
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error adding to cart', 'error');
+            }
+        }
+        
+        // Toggle wishlist
+        async function toggleWishlist(productId, btn) {
+            const isActive = btn.classList.contains('active');
+            const url = isActive ? '/api/remove-from-wishlist/' : '/api/add-to-wishlist/';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        product_id: parseInt(productId)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    btn.classList.toggle('active');
+                    showNotification(data.message, 'success');
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error updating wishlist', 'error');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Event listeners for filters
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                renderProducts();
+            });
+        }
+        
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                currentType = 'all';
+                currentSort = 'default';
+                if (sortSelect) sortSelect.value = 'default';
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector('[data-type="all"]')?.classList.add('active');
+                renderProducts();
+            });
+        }
+        
+        // Category buttons
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentType = btn.dataset.type;
+                renderProducts();
+            });
+        });
+        
+        // Set first size as active for each product
+        document.querySelectorAll('.size-options').forEach(container => {
+            const firstSize = container.querySelector('.size-btn');
+            if (firstSize) {
+                firstSize.classList.add('active');
+            }
+        });
+        
+        // Initial render
+        renderProducts();
+    });
+    
+    // Add animation style
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

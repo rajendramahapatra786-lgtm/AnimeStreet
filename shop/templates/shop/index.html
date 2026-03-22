@@ -1,0 +1,128 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}AnimeStreet - Premium Anime Merchandise{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<div class="hero-banner">
+    <img src="https://img.freepik.com/free-photo/digital-art-with-person-looking-city-landscape_23-2151065723.jpg"
+        alt="Anime Banner">
+    <div class="hero-text">
+        <h1>ANIME STREETWEAR</h1>
+        <p>Summer Sale - Up to 40% Off</p>
+        <a href="{% url 'shop:fashion' %}" class="btn btn-primary">Shop Now</a>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Categories -->
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="categories-grid">
+        <a href="{% url 'shop:fashion' %}" class="category-card">
+            <div>
+                <i class="fas fa-tshirt"></i>
+                <h3>Fashion</h3>
+                <p>Tshirts & Hoodies</p>
+            </div>
+        </a>
+        <a href="{% url 'shop:watches' %}" class="category-card">
+            <div>
+                <i class="fas fa-clock"></i>
+                <h3>Watches</h3>
+                <p>Anime Wrist Watches</p>
+            </div>
+        </a>
+        <a href="{% url 'shop:bags' %}" class="category-card">
+            <div>
+                <i class="fas fa-bag-shopping"></i>
+                <h3>Bags</h3>
+                <p>Anime Backpacks</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Featured Products -->
+    <h2 class="section-title">Featured Products</h2>
+    <div class="products-grid" id="featuredProductsGrid">
+        {% for product in featured_products %}
+        <div class="product-card" data-id="{{ product.product_id }}">
+            <div class="product-image">
+                {% if product.image %}
+                <img src="{% static product.image %}" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static product.image %}" alt="{{ product.name }}">
+                {% endif %}
+                <span class="product-badge">Featured</span>
+                <div class="product-actions">
+                    <button class="action-btn add-to-cart-btn" data-id="{{ product.product_id }}" data-size="M">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="action-btn wishlist-btn" data-id="{{ product.product_id }}">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="product-info">
+                <div class="product-category">{{ product.category.display_name }}</div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <div class="product-rating">
+                    <span class="stars">{{ product.rating|floatformat:1 }} ★</span>
+                    <span class="reviews">({{ product.reviews }})</span>
+                </div>
+                <div class="product-price">₹{{ product.price|floatformat:0 }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- All Products -->
+    <h2 class="section-title">All Products</h2>
+    <div class="products-grid" id="allProductsGrid">
+        {% for product in all_products %}
+        <div class="product-card" data-id="{{ product.product_id }}">
+            <div class="product-image">
+                <img src="{% static product.image %}" alt="{{ product.name }}">
+                {% if product.featured %}
+                <span class="product-badge">Featured</span>
+                {% endif %}
+                <div class="product-actions">
+                    <button class="action-btn add-to-cart-btn" data-id="{{ product.product_id }}" data-size="M">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="action-btn wishlist-btn" data-id="{{ product.product_id }}">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="product-info">
+                <div class="product-category">{{ product.category.display_name }}</div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <div class="product-rating">
+                    <span class="stars">{{ product.rating|floatformat:1 }} ★</span>
+                    <span class="reviews">({{ product.reviews }})</span>
+                </div>
+                <div class="product-price">₹{{ product.price|floatformat:0 }}</div>
+                <a href="{% url 'shop:fashion' %}" class="view-all-link">
+                    View all in {{ product.category.display_name|default:product.category }}
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Handle search query from sessionStorage
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchQuery = sessionStorage.getItem('searchQuery');
+        if (searchQuery) {
+            // Filter products if needed
+            console.log('Searching for:', searchQuery);
+            sessionStorage.removeItem('searchQuery');
+        }
+    });
+</script>
+{% endblock %}

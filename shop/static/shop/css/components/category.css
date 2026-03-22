@@ -1,0 +1,83 @@
+/* ===== CATEGORY SECTION ===== */
+.category-section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+/* TITLE (optional if using .section-title) */
+.category-section h2 {
+    font-size: 28px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.category-section h2::after {
+    content: "";
+    width: 60px;
+    height: 3px;
+    background: var(--primary);
+    display: block;
+    margin: 10px auto 0;
+}
+
+/* ===== GRID CONTAINER ===== */
+.categories-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+/* ===== CATEGORY CARD ===== */
+.category-card {
+    width: 350px;
+    height: 145px;
+    padding: 20px;
+
+    background: #ffffff;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    text-decoration: none;
+
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* INNER CONTENT */
+.category-card div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ICON */
+.category-card i {
+    font-size: 28px;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+/* TITLE */
+.category-card h3 {
+    color: #1E272E;
+    margin-bottom: 5px;
+}
+
+/* TEXT */
+.category-card p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* ===== HOVER EFFECT ===== */
+.category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}

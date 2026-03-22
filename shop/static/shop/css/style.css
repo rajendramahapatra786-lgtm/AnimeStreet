@@ -1,0 +1,588 @@
+/* ===== RESET & VARIABLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colors */
+    --primary: #ff3b6f;
+    --primary-dark: #e62e5c;
+    --secondary: #6c5ce7;
+    --success: #00b894;
+    --danger: #d63031;
+    --warning: #fdcb6e;
+    --dark: #1e272e;
+    --darker: #151e26;
+    --light: #f5f6fa;
+    --gray: #808e9b;
+    --white: #ffffff;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
+    --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+}
+
+/* ===== GLOBAL STYLES ===== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+    width: 100%;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: var(--white);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+/* ===== BADGES ===== */
+.badge {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50%;
+    position: absolute;
+    top: -5px;
+    right: -10px;
+}
+
+/* ===== SECTION TITLES ===== */
+.section-title {
+    font-size: 2rem;
+    margin-bottom: var(--space-lg);
+    text-align: center;
+    position: relative;
+    padding-bottom: var(--space-sm);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--primary);
+}
+
+/* ===== PRODUCTS GRID ===== */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    padding: var(--space-lg) 0;
+}
+
+/* ===== PRICE ===== */
+.price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.price::before {
+    content: '₹';
+    margin-right: 2px;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+    text-align: center;
+    padding: var(--space-xl) 0;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--white);
+    margin-bottom: var(--space-xl);
+    border-radius: var(--radius-lg);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-xs);
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* ===== HERO BANNER ===== */
+.hero-banner {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    margin-bottom: var(--space-xl);
+}
+
+.hero-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--white);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    margin-bottom: var(--space-sm);
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    margin-bottom: var(--space-md);
+}
+
+/* Wishlist Heart Button */
+.product-image {
+    position: relative;
+}
+
+.wishlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.wishlist-btn i {
+    color: #ccc;
+    font-size: 1.2rem;
+}
+
+.wishlist-btn.active i {
+    color: #ff4444;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.empty-state-icon {
+    width: 120px;
+    height: 120px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state-icon i {
+    font-size: 3rem;
+    color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wishlist-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .wishlist-item-image {
+        margin: 0 auto;
+    }
+    
+    .wishlist-item-actions {
+        justify-content: center;
+    }
+}
+
+/* ========== WISHLIST PAGE STYLES ========== */
+
+.wishlist-container {
+    max-width: 100%;
+    margin: 0 auto 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+/* Wishlist Item Card */
+.wishlist-item {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee;
+    width: 100%;
+}
+
+.wishlist-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+/* Product Image */
+.wishlist-item-image {
+    width: 200px;
+    min-width: 200px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: #f8f8f8;
+}
+
+.wishlist-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.wishlist-item:hover .wishlist-item-image img {
+    transform: scale(1.05);
+}
+
+/* Product Details - Now with flex row for content and buttons */
+.wishlist-item-details {
+    flex: 1;
+    padding: 25px;
+    display: flex;
+    gap: 20px;  /* Space between content and buttons */
+}
+
+/* Left side - Product info */
+.wishlist-item-info {
+    flex: 2;  /* Takes more space */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Right side - Action buttons */
+.wishlist-item-actions {
+    flex: 0.8;  /* Takes less space */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;  /* Center buttons vertically */
+    min-width: 160px;  /* Minimum width for buttons */
+}
+
+.wishlist-item-category {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #e44d26;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.wishlist-item-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.wishlist-item-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.wishlist-item-title a:hover {
+    color: #e44d26;
+}
+
+/* Rating */
+.wishlist-item-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.wishlist-item-rating .stars {
+    color: #ffc107;
+    letter-spacing: 2px;
+}
+
+.wishlist-item-rating .reviews {
+    color: #666;
+}
+
+/* Price */
+.wishlist-item-price {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #e44d26;
+}
+
+/* Size Selector */
+.wishlist-item-sizes {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 5px 0;
+}
+
+.wishlist-item-sizes .size-label {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.wishlist-item-sizes .size-options {
+    display: flex;
+    gap: 10px;
+}
+
+.wishlist-item-sizes .size-btn {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.wishlist-item-sizes .size-btn:hover {
+    border-color: #e44d26;
+    color: #e44d26;
+}
+
+.wishlist-item-sizes .size-btn.active {
+    background: #e44d26;
+    border-color: #e44d26;
+    color: white;
+}
+
+/* Action Buttons - Side by side vertically */
+.btn-move-cart {
+    width: 100%;
+    padding: 14px 20px;
+    background: #e44d26;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+    white-space: nowrap;  /* Prevent text wrap */
+}
+
+.btn-move-cart:hover {
+    background: #c73e1d;
+}
+
+.btn-remove {
+    width: 100%;
+    padding: 14px 20px;
+    background: white;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-remove:hover {
+    background: #fff5f5;
+    border-color: #ff4444;
+    color: #ff4444;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin: 40px auto;
+    max-width: 600px;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .wishlist-item-details {
+        flex-direction: column;
+    }
+    
+    .wishlist-item-actions {
+        flex-direction: row;
+        min-width: auto;
+    }
+    
+    .btn-move-cart, .btn-remove {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .wishlist-item {
+        flex-direction: column;
+    }
+    
+    .wishlist-item-image {
+        width: 100%;
+        height: 250px;
+    }
+    
+    .wishlist-item-details {
+        flex-direction: column;
+    }
+    
+    .wishlist-item-actions {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 480px) {
+    .wishlist-item-sizes {
+        flex-wrap: wrap;
+    }
+    
+    .wishlist-item-title {
+        font-size: 1.2rem;
+    }
+    
+    .wishlist-item-price {
+        font-size: 1.4rem;
+    }
+    
+    .wishlist-item-details {
+        padding: 20px;
+    }
+    
+    .wishlist-item-actions {
+        flex-direction: column;
+    }
+}
+
+
+.view-all-link {
+    text-decoration: none;   /* ❌ remove underline */
+    color: #ff4d6d;          /* ✅ pink color */
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.view-all-link:hover {
+    color: #ff2e5f;          /* darker pink on hover */
+    text-decoration: none;
+}

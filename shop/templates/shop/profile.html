@@ -1,0 +1,504 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}My Profile - AnimeStreet{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+    
+    .profile-container h1 {
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 2rem;
+    }
+    
+    .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+    }
+    
+    .profile-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+    
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .profile-card h3 {
+        margin-bottom: 20px;
+        color: #ff6b6b;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+    }
+    
+    .profile-card h3 i {
+        font-size: 1.2rem;
+    }
+    
+    .user-info p {
+        margin: 12px 0;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    .user-info strong {
+        display: inline-block;
+        width: 100px;
+        color: #555;
+    }
+    
+    .cart-item, .wishlist-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .cart-item:hover, .wishlist-item:hover {
+        background: #f8f9fa;
+    }
+    
+    .cart-item-info, .wishlist-item-info {
+        flex: 1;
+    }
+    
+    .cart-item-name, .wishlist-item-name {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .cart-item-price, .wishlist-item-price {
+        color: #ff6b6b;
+        font-weight: 600;
+    }
+    
+    .cart-item-remove, .wishlist-item-remove {
+        color: #dc3545;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    
+    .cart-item-remove:hover, .wishlist-item-remove:hover {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .cart-total {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 2px solid #f0f0f0;
+        text-align: right;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    .cart-total span {
+        color: #ff6b6b;
+        font-size: 1.4rem;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .stat-box {
+        text-align: center;
+        padding: 15px;
+        background: linear-gradient(135deg, #ff6b6b, #ff4757);
+        color: white;
+        border-radius: 8px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        margin-top: 5px;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .checkout-btn {
+        flex: 1;
+        padding: 10px;
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s ease;
+    }
+    
+    .checkout-btn:hover {
+        background: #ff4757;
+    }
+    
+    .logout-btn {
+        width: 100%;
+        margin-top: 30px;
+        padding: 12px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: background 0.2s ease;
+    }
+    
+    .logout-btn:hover {
+        background: #c82333;
+    }
+    
+    .order-item {
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+    }
+    
+    .order-item:hover {
+        border-color: #ff6b6b;
+    }
+    
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .order-id {
+        font-weight: bold;
+        color: #ff6b6b;
+    }
+    
+    .order-date {
+        color: #999;
+        font-size: 0.9rem;
+    }
+    
+    .order-status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .status-delivered {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-processing {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-shipped {
+        background: #cce5ff;
+        color: #004085;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-container">
+        <h1><i class="fas fa-user-circle"></i> My Profile</h1>
+        
+        <div class="profile-grid">
+            <!-- User Information Card -->
+            <div class="profile-card user-info">
+                <h3><i class="fas fa-user"></i> Account Information</h3>
+                <p><strong>Name:</strong> {{ user.first_name|default:user.username }}</p>
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Phone:</strong> {{ user.phone|default:"Not provided" }}</p>
+                <p><strong>Address:</strong> {{ user.address|default:"Not provided" }}</p>
+                <p><strong>Member since:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">{{ total_orders }}</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">₹{{ total_spent|floatformat:0 }}</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">{{ wishlist_items|length }}</div>
+                        <div class="stat-label">Wishlist</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Current Cart Card -->
+            <div class="profile-card">
+                <h3><i class="fas fa-shopping-cart"></i> Current Cart ({{ cart_items|length }} items)</h3>
+                {% if cart_items %}
+                    <div>
+                        {% for item in cart_items %}
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">{{ item.product.name }}</div>
+                                <div class="cart-item-price">₹{{ item.product.price|floatformat:0 }} × {{ item.quantity }}</div>
+                                <div class="cart-item-size">Size: {{ item.size }}</div>
+                            </div>
+                            <div class="cart-item-remove" onclick="removeFromCart({{ item.product.product_id }}, '{{ item.size }}')">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="cart-total">
+                            Total: <span>₹{{ cart_total|floatformat:0 }}</span>
+                        </div>
+                        <div class="action-buttons">
+                            <a href="{% url 'shop:cart' %}" class="checkout-btn">View Cart</a>
+                            <a href="{% url 'shop:checkout' %}" class="checkout-btn">Checkout</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Your cart is empty</p>
+                        <a href="{% url 'shop:index' %}" class="checkout-btn">Start Shopping</a>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Wishlist Card -->
+            <div class="profile-card">
+                <h3><i class="fas fa-heart"></i> Wishlist ({{ wishlist_items|length }} items)</h3>
+                {% if wishlist_items %}
+                    <div>
+                        {% for item in wishlist_items %}
+                        <div class="wishlist-item">
+                            <div class="wishlist-item-info">
+                                <div class="wishlist-item-name">{{ item.product.name }}</div>
+                                <div class="wishlist-item-price">₹{{ item.product.price|floatformat:0 }}</div>
+                            </div>
+                            <div class="wishlist-item-remove" onclick="removeFromWishlist({{ item.product.product_id }})">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="action-buttons">
+                            <a href="{% url 'shop:wishlist' %}" class="checkout-btn">View All</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-heart-broken"></i>
+                        <p>Your wishlist is empty</p>
+                        <a href="{% url 'shop:fashion' %}" class="checkout-btn">Explore Products</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Order History Card -->
+        <div class="profile-card" style="margin-top: 25px;">
+            <h3><i class="fas fa-history"></i> Order History ({{ orders|length }} orders)</h3>
+            {% if orders %}
+                <div>
+                    {% for order in orders %}
+                    <div class="order-item">
+                        <div class="order-header">
+                            <span class="order-id">Order #{{ order.order_id|truncatechars:8 }}</span>
+                            <span class="order-date">{{ order.created_at|date:"F d, Y" }}</span>
+                            <span class="order-status status-{{ order.status }}">{{ order.get_status_display }}</span>
+                        </div>
+                        <p><strong>Items:</strong> {{ order.items.count }} products</p>
+                        <p><strong>Total:</strong> ₹{{ order.total_amount|floatformat:0 }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-shopping-bag"></i>
+                    <p>No orders yet</p>
+                    <a href="{% url 'shop:index' %}" class="checkout-btn">Start Shopping</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Remove from cart
+    async function removeFromCart(productId, size) {
+        try {
+            const response = await fetch('/api/remove-from-cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    size: size
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification('Item removed from cart', 'success');
+                location.reload();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showNotification('Error removing item', 'error');
+        }
+    }
+    
+    // Remove from wishlist
+    async function removeFromWishlist(productId) {
+        try {
+            const response = await fetch('/api/remove-from-wishlist/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification('Item removed from wishlist', 'success');
+                location.reload();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showNotification('Error removing item', 'error');
+        }
+    }
+    
+    // Logout
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            window.location.href = "{% url 'shop:logout' %}";
+        }
+    }
+    
+    // Show notification
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: ${type === 'success' ? '#28a745' : '#dc3545'};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+    
+    // Add animation style
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

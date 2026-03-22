@@ -1,0 +1,749 @@
+[
+  {
+    "model": "shop.category",
+    "pk": 1,
+    "fields": {
+      "name": "fashion",
+      "display_name": "Fashion",
+      "icon": "fa-tshirt"
+    }
+  },
+  {
+    "model": "shop.category",
+    "pk": 2,
+    "fields": {
+      "name": "watches",
+      "display_name": "Watches",
+      "icon": "fa-clock"
+    }
+  },
+  {
+    "model": "shop.category",
+    "pk": 3,
+    "fields": {
+      "name": "bags",
+      "display_name": "Bags",
+      "icon": "fa-bag-shopping"
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 1,
+    "fields": {
+      "product_id": 1,
+      "name": "Demon Slayer Tanjiro Kamado T-Shirt",
+      "price": 1299,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Demon Slayer Tanjiro Kamado T-Shirt.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 234,
+      "description": "High-quality cotton t-shirt featuring Tanjiro from Demon Slayer",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 2,
+    "fields": {
+      "product_id": 2,
+      "name": "Naruto Shippuden Sage Mode T-Shirt",
+      "price": 1199,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Naruto Shippuden Sage Mode T-Shirt.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 567,
+      "description": "Naruto Uzumaki in Sage Mode design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 3,
+    "fields": {
+      "product_id": 3,
+      "name": "One Piece Luffy Gear 5 T-Shirt",
+      "price": 1499,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/One Piece Luffy Gear 5 T-Shirt.png",
+      "image_url": "",
+      "rating": 5.0,
+      "reviews": 123,
+      "description": "Celebrate Gear 5 with this exclusive design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 4,
+    "fields": {
+      "product_id": 4,
+      "name": "Jujutsu Kaisen Gojo Satoru T-Shirt",
+      "price": 1399,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Jujutsu Kaisen Gojo Satoru T-Shirt.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 345,
+      "description": "Premium t-shirt with Gojo's iconic look",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 5,
+    "fields": {
+      "product_id": 5,
+      "name": "Attack on Titan Eren Yeager T-Shirt",
+      "price": 1299,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Attack on Titan Eren Yeager T-Shirt.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 189,
+      "description": "Survey Corps design with Eren",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 6,
+    "fields": {
+      "product_id": 6,
+      "name": "Dragon Ball Z Goku Ultra Instinct T-Shirt",
+      "price": 1399,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Dragon Ball Z Goku Ultra Instinct T-Shirt.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 456,
+      "description": "Goku in Ultra Instinct form",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 7,
+    "fields": {
+      "product_id": 7,
+      "name": "Demon Slayer Akaza Hoodie",
+      "price": 2499,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Demon Slayer Akaza Hoodie.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 278,
+      "description": "Premium hoodie featuring Akaza from Demon Slayer",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 8,
+    "fields": {
+      "product_id": 8,
+      "name": "Naruto Akatsuki Cloud Hoodie",
+      "price": 2399,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Naruto Akatsuki Cloud Hoodie.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 456,
+      "description": "Akatsuki cloud design hoodie",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 9,
+    "fields": {
+      "product_id": 9,
+      "name": "Attack on Titan Scout Regiment Hoodie",
+      "price": 2599,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Attack on Titan Scout Regiment Hoodie.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 189,
+      "description": "Wings of Freedom design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 10,
+    "fields": {
+      "product_id": 10,
+      "name": "Jujutsu Kaisen Sukuna Hoodie",
+      "price": 2699,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Jujutsu Kaisen Sukuna Hoodie.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 234,
+      "description": "King of Curses design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 11,
+    "fields": {
+      "product_id": 11,
+      "name": "One Piece Straw Hat Pirates Hoodie",
+      "price": 2499,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/One Piece Straw Hat Pirates Hoodie.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 345,
+      "description": "Straw Hat Jolly Roger design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 12,
+    "fields": {
+      "product_id": 12,
+      "name": "Dragon Ball Z Super Saiyan Hoodie",
+      "price": 2799,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Dragon Ball Z Super Saiyan Hoodie.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 567,
+      "description": "Super Saiyan transformation design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 13,
+    "fields": {
+      "product_id": 13,
+      "name": "Dragon Ball Z Chronograph Watch",
+      "price": 3499,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Dragon Ball Z Chronograph Watch.png",
+      "image_url": "",
+      "rating": 4.6,
+      "reviews": 89,
+      "description": "Official Dragon Ball Z chronograph watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 14,
+    "fields": {
+      "product_id": 14,
+      "name": "Naruto Akatsuki Cloud Watch",
+      "price": 2999,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Naruto Akatsuki Cloud Watch.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 145,
+      "description": "Akatsuki cloud design analog watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 15,
+    "fields": {
+      "product_id": 15,
+      "name": "One Piece Pirate King Watch",
+      "price": 3999,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/One Piece Pirate King Watch.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 67,
+      "description": "Limited edition Pirate King watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 16,
+    "fields": {
+      "product_id": 16,
+      "name": "Demon Slayer Clockwork Watch",
+      "price": 3299,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Demon Slayer Clockwork Watch.png",
+      "image_url": "",
+      "rating": 4.5,
+      "reviews": 34,
+      "description": "Demon Slayer themed mechanical watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 17,
+    "fields": {
+      "product_id": 17,
+      "name": "Pikachu Electric Backpack",
+      "price": 1899,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Pikachu Electric Backpack.jpg",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 234,
+      "description": "Pikachu face backpack with electric details",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 18,
+    "fields": {
+      "product_id": 18,
+      "name": "Naruto Ninja Messenger Bag",
+      "price": 1599,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Naruto Ninja Messenger Bag.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 178,
+      "description": "Hidden Leaf Village messenger bag",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 19,
+    "fields": {
+      "product_id": 19,
+      "name": "Attack on Titan Survey Corps Backpack",
+      "price": 2199,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Attack on Titan Survey Corps Backpack.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 145,
+      "description": "Survey Corps emblem backpack",
+      "sizes": [],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 20,
+    "fields": {
+      "product_id": 20,
+      "name": "Demon Slayer Kimetsu Bag",
+      "price": 1799,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Demon Slayer Kimetsu Bag.png",
+      "image_url": "",
+      "rating": 4.6,
+      "reviews": 89,
+      "description": "Demon Slayer pattern backpack",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 21,
+    "fields": {
+      "product_id": 21,
+      "name": "Blue Lock Isagi Yoichi T-Shirt",
+      "price": 1399,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Blue Lock Isagi Yoichi T-Shirt.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 120,
+      "description": "Striker ego design featuring Isagi Yoichi",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 22,
+    "fields": {
+      "product_id": 22,
+      "name": "Black Clover Asta Anti Magic T-Shirt",
+      "price": 1499,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Black Clover Asta Anti Magic T-Shirt.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 210,
+      "description": "Asta with anti-magic sword design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 23,
+    "fields": {
+      "product_id": 23,
+      "name": "Solo Leveling Sung Jin-Woo Shadow T-Shirt",
+      "price": 1599,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Solo Leveling Sung Jin-Woo Shadow T-Shirt.png",
+      "image_url": "",
+      "rating": 5.0,
+      "reviews": 300,
+      "description": "Shadow Monarch Jin-Woo design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 24,
+    "fields": {
+      "product_id": 24,
+      "name": "Bleach Ichigo Kurosaki Bankai T-Shirt",
+      "price": 1399,
+      "category": 1,
+      "sub_category": "tshirt",
+      "type": "T-Shirt",
+      "image": "shop/images/products/t-shirt/Bleach Ichigo Kurosaki Bankai T-Shirt.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 180,
+      "description": "Ichigo Bankai form design",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 25,
+    "fields": {
+      "product_id": 25,
+      "name": "Blue Lock Ego Striker Hoodie",
+      "price": 2599,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Blue Lock Ego Striker Hoodie.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 90,
+      "description": "Blue Lock striker themed hoodie",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 26,
+    "fields": {
+      "product_id": 26,
+      "name": "Black Clover Black Bulls Hoodie",
+      "price": 2699,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Black Clover Black Bulls Hoodie.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 140,
+      "description": "Black Bulls squad hoodie",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 27,
+    "fields": {
+      "product_id": 27,
+      "name": "Solo Leveling Shadow Army Hoodie",
+      "price": 2799,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Solo Leveling Shadow Army Hoodie.png",
+      "image_url": "",
+      "rating": 5.0,
+      "reviews": 200,
+      "description": "Shadow army aesthetic hoodie",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 28,
+    "fields": {
+      "product_id": 28,
+      "name": "Bleach Soul Reaper Hoodie",
+      "price": 2599,
+      "category": 1,
+      "sub_category": "hoodie",
+      "type": "Hoodie",
+      "image": "shop/images/products/hoodies/Bleach Soul Reaper Hoodie.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 160,
+      "description": "Soul Reaper uniform style hoodie",
+      "sizes": ["S", "M", "L", "XL"],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 29,
+    "fields": {
+      "product_id": 29,
+      "name": "Blue Lock Egoist Striker Watch",
+      "price": 3499,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Blue Lock Egoist Striker Watch.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 110,
+      "description": "Blue Lock striker ego themed watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 30,
+    "fields": {
+      "product_id": 30,
+      "name": "Black Clover Magic Knight Watch",
+      "price": 3299,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Black Clover Magic Knight Watch.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 150,
+      "description": "Magic Knight squad inspired watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 31,
+    "fields": {
+      "product_id": 31,
+      "name": "Solo Leveling Shadow Monarch Watch",
+      "price": 3799,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Solo Leveling Shadow Monarch Watch.png",
+      "image_url": "",
+      "rating": 5.0,
+      "reviews": 200,
+      "description": "Shadow Monarch premium watch design",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 32,
+    "fields": {
+      "product_id": 32,
+      "name": "Bleach Soul Reaper Bankai Watch",
+      "price": 3599,
+      "category": 2,
+      "sub_category": "",
+      "type": "Watch",
+      "image": "shop/images/watches/Bleach Soul Reaper Bankai Watch.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 175,
+      "description": "Bankai inspired luxury anime watch",
+      "sizes": [],
+      "in_stock": true,
+      "featured": false
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 33,
+    "fields": {
+      "product_id": 33,
+      "name": "Blue Lock Ego Striker Backpack",
+      "price": 1999,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Blue Lock Ego Striker Backpack.png",
+      "image_url": "",
+      "rating": 4.7,
+      "reviews": 120,
+      "description": "Blue Lock striker themed backpack",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 34,
+    "fields": {
+      "product_id": 34,
+      "name": "Black Clover Black Bulls Backpack",
+      "price": 1899,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Black Clover Black Bulls Backpack.png",
+      "image_url": "",
+      "rating": 4.8,
+      "reviews": 150,
+      "description": "Black Bulls squad logo backpack",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 35,
+    "fields": {
+      "product_id": 35,
+      "name": "Solo Leveling Shadow Army Backpack",
+      "price": 2199,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Solo Leveling Shadow Army Backpack.png",
+      "image_url": "",
+      "rating": 5.0,
+      "reviews": 180,
+      "description": "Shadow army aesthetic backpack",
+      "sizes": [],
+      "in_stock": true,
+      "featured": true
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 36,
+    "fields": {
+      "product_id": 36,
+      "name": "Bleach Soul Reaper Backpack",
+      "price": 1999,
+      "category": 3,
+      "sub_category": "",
+      "type": "Bag",
+      "image": "shop/images/bags/Bleach Soul Reaper Backpack.png",
+      "image_url": "",
+      "rating": 4.9,
+      "reviews": 140,
+      "description": "Soul Reaper uniform themed backpack",
+      "sizes": [],
+      "in_stock": true,
+      "featured": false
+    }
+  }
+]

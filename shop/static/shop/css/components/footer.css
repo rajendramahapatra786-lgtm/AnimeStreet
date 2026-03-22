@@ -1,0 +1,99 @@
+/* ===== FOOTER ===== */
+.footer {
+    background: #151E26; 
+    color: #cbd5e1;
+    padding: 48px 0 24px;
+}
+
+/* GRID */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+/* SECTION */
+.footer-section h3 {
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.footer-section h4 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+/* TEXT */
+.footer-section p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* LINKS */
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-section a:hover {
+    color: #ff4d6d;
+}
+
+/* ICON LINKS */
+.footer-section i {
+    margin-right: 8px;
+}
+
+/* SOCIAL */
+.social-links {
+    margin-top: 15px;
+}
+
+.social-links a {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 18px;
+    color: #cbd5e1;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    color: #ff4d6d;
+}
+
+/* PAYMENT ICONS (if you add later) */
+.payment-icons img {
+    height: 30px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+/* BOTTOM */
+.footer-bottom {
+    border-top: 1px solid #334155;
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.footer-bottom i {
+    color: #ff4d6d;
+}
+
+.social-links a:hover {
+    color: #ff4d6d;
+    transform: scale(1.2);
+}

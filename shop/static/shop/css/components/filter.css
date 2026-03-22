@@ -1,0 +1,125 @@
+/* ===== FILTERS SECTION STYLES ===== */
+.filters-section {
+    background: var(--white);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-lg);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: var(--gray);
+}
+
+.filter-group select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--gray);
+    border-radius: var(--radius-sm);
+    outline: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.category-buttons {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.category-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--gray);
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-reset {
+    padding: 0.5rem 1rem;
+    background: var(--gray);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-reset:hover {
+    background: var(--dark);
+}
+
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.products-header h2 {
+    font-size: 1.5rem;
+    color: var(--dark);
+}
+
+.products-header p {
+    color: var(--gray);
+}
+
+/* Active filters */
+.active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+}
+
+.filter-tag {
+    background: var(--light);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.filter-tag i {
+    cursor: pointer;
+    color: var(--danger);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filters-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .category-buttons {
+        flex-wrap: wrap;
+    }
+}

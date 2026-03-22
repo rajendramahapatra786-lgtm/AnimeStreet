@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AnimeStreet - Anime Merchandise Store{% endblock %}</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/components/category.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/components/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/components/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/components/product-card.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/responsive.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'shop/components/navbar.html' %}
+    
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    {% include 'shop/components/footer.html' %}
+    
+    <!-- JavaScript Files -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Global Django CSRF token for AJAX requests
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrftoken = getCookie('csrftoken');
+        window.cartCount = {{ cart_count|default:0 }};
+   
+    </script>
+
+    <!-- <script src="{% static 'shop/js/helpers.js' %}"></script> -->
+    <!-- <script src="{% static 'shop/js/cart.js' %}"></script> -->
+    <!-- <script src="{% static 'shop/js/wishlist.js' %}"></script> -->
+    <!-- <script src="{% static 'shop/js/filters.js' %}"></script> -->
+    <!-- <script src="{% static 'shop/js/main.js' %}"></script> -->
+    <!-- <script src="{% static 'shop/js/components/load-components.js' %}"></script>  -->
+    
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

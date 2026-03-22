@@ -1,0 +1,70 @@
+/* ===== FOOTER STYLES ===== */
+.footer {
+    background: var(--darker);
+    color: var(--white);
+    padding: var(--space-xl) 0 var(--space-md);
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.footer-section h3,
+.footer-section h4 {
+    margin-bottom: var(--space-md);
+    color: var(--white);
+}
+
+.footer-section h3 span {
+    color: var(--primary);
+}
+
+.footer-section p {
+    color: var(--gray);
+    margin-bottom: var(--space-sm);
+}
+
+.footer-section a {
+    display: block;
+    color: var(--gray);
+    text-decoration: none;
+    margin-bottom: var(--space-xs);
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: var(--primary);
+}
+
+.social-links {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.social-links a {
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+.payment-methods {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.payment-methods i {
+    font-size: 2rem;
+    color: var(--gray);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: var(--gray);
+}

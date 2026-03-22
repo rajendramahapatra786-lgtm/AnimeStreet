@@ -1,0 +1,166 @@
+/* ===== NAVBAR ===== */
+.navbar {
+    background: var(--dark);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+}
+
+/* MAIN LAYOUT */
+.navbar .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+    display: flex;
+    align-items: center;
+}
+
+/* LEFT (LOGO) */
+.navbar-brand {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand a {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.navbar-brand a span {
+    color: var(--primary);
+}
+
+/* CENTER (SEARCH) */
+.navbar-actions {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    width: 350px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: none;
+}
+
+.search-box button {
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+}
+
+/* RIGHT (MENU + ICONS) */
+.navbar-menu {
+    flex: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+}
+
+/* NAV LINKS */
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.5rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+}
+
+/* USER ACTIONS */
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ICONS */
+.action-icon {
+    color: var(--white);
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 50%;
+}
+
+/* FIX OVERFLOW */
+.navbar {
+    overflow: hidden;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .search-box {
+        width: 200px;
+    }
+
+    .navbar-menu {
+        display: none;
+    }
+}
+
+/* FIX LAYOUT */
+.navbar .container {
+    display: flex;
+    align-items: center;
+}
+
+/* LEFT */
+.navbar-brand {
+    flex: 1;
+}
+
+/* CENTER */
+.navbar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+/* RIGHT */
+.navbar-right {
+    flex: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 25px;
+}
+
+/* FIX MENU */
+.navbar-menu {
+    display: flex;
+    gap: 20px;
+}
+
+/* FIX SEARCH */
+.search-box {
+    width: 350px;
+}
