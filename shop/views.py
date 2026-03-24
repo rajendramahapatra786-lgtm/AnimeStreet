@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 import json
+from decimal import Decimal 
 
 from .models import Category, Product, Cart, CartItem, Wishlist, WishlistItem, Order, OrderItem
 from .forms import SignupForm
@@ -130,7 +131,7 @@ def cart(request):
     cart_items = cart.items.select_related('product').all()
     
     subtotal = cart.get_total()
-    tax = subtotal * 0.18
+    tax = subtotal * Decimal('0.18')  # Fixed: using Decimal instead of float
     total = subtotal + tax
     
     context = {
@@ -160,7 +161,7 @@ def checkout(request):
         return redirect('shop:cart')
     
     subtotal = cart.get_total()
-    tax = subtotal * 0.18
+    tax = subtotal * Decimal('0.18')  # Fixed: using Decimal instead of float
     total = subtotal + tax
     
     context = {
