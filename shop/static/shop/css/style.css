@@ -586,3 +586,24 @@ body {
     color: #ff2e5f;          /* darker pink on hover */
     text-decoration: none;
 }
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #ff4757;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1;
+    display: inline-block;   /* 🔥 FORCE SHOW */
+    z-index: 999;            /* 🔥 FIX OVERLAP */
+}
+.action-icon {
+    position: relative;
+    display: inline-block;
+}

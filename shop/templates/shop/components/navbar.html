@@ -32,10 +32,12 @@
             <!-- ICONS -->
             <a href="{% url 'shop:wishlist' %}" class="action-icon">
                 <i class="fas fa-heart"></i>
+                <span id="wishlistCount" class="badge">0</span>
             </a>
 
             <a href="{% url 'shop:cart' %}" class="action-icon">
                 <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount" class="badge">0</span>
             </a>
 
             {% if user.is_authenticated %}

@@ -28,4 +28,10 @@ urlpatterns = [
     path('api/add-to-wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
     path('api/remove-from-wishlist/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('api/place-order/', views.place_order, name='place_order'),
+
+    # path('api/cart-ids/', views.get_cart_ids),
+
+    path('api/wishlist-count/', views.wishlist_count),
+    path('api/wishlist-ids/', views.wishlist_ids),
+    path('api/cart-ids/', views.cart_ids),
 ]

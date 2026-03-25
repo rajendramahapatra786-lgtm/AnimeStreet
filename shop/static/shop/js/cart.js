@@ -1,6 +1,7 @@
 // cart.js - Shopping cart functionality with Django API
 
 const CartService = {
+
     // Add item to cart via API
     addToCart: async (productId, size = 'M', quantity = 1) => {
         try {
@@ -16,12 +17,19 @@ const CartService = {
                     quantity: quantity
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 Helpers.showNotification(data.message, 'success');
+
+                // 🔥 INSTANT COUNT
+                CartService.incrementCartCount();
+
+                // ✅ backend sync
                 CartService.updateCartCount(data.cart_count);
+                CartService.loadCartState();
+
                 return true;
             } else {
                 Helpers.showNotification(data.message, 'error');
@@ -48,12 +56,19 @@ const CartService = {
                     size: size
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 Helpers.showNotification(data.message, 'success');
+
+                // 🔥 DECREASE COUNT
+                CartService.decrementCartCount();
+
+                // ✅ backend sync
                 CartService.updateCartCount(data.cart_count);
+                CartService.loadCartState();
+
                 return true;
             } else {
                 Helpers.showNotification(data.message, 'error');
@@ -66,54 +81,61 @@ const CartService = {
         }
     },
 
-    // Update quantity
-    updateQuantity: async (productId, size, quantity) => {
-        try {
-            const response = await fetch('/api/update-cart/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': Helpers.getCSRFToken()
-                },
-                body: JSON.stringify({
-                    product_id: parseInt(productId),
-                    size: size,
-                    quantity: quantity
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                CartService.updateCartCount(data.cart_count);
-                return data;
-            } else {
-                Helpers.showNotification(data.message, 'error');
-                return null;
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            Helpers.showNotification('Error updating cart', 'error');
-            return null;
-        }
+    // 🔥 Instant increase
+    incrementCartCount: () => {
+        document.querySelectorAll('#cartCount').forEach(badge => {
+            let count = parseInt(badge.textContent) || 0;
+            count += 1;
+            badge.textContent = count;
+            badge.style.display = 'inline-block';
+        });
     },
 
-    // Update cart count display
+    // 🔥 Instant decrease
+    decrementCartCount: () => {
+        document.querySelectorAll('#cartCount').forEach(badge => {
+            let count = parseInt(badge.textContent) || 0;
+            count = Math.max(0, count - 1);
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'inline-block' : 'none';
+        });
+    },
+
+    // Update cart count display (backend)
     updateCartCount: (count) => {
         const cartBadges = document.querySelectorAll('#cartCount');
         cartBadges.forEach(badge => {
             if (badge) {
                 badge.textContent = count || 0;
-                if (count > 0) {
-                    badge.style.display = 'inline-block';
-                } else {
-                    badge.style.display = 'none';
-                }
+                badge.style.display = count > 0 ? 'inline-block' : 'none';
             }
         });
     },
 
-    // Get cart total from page or API
+    // Load cart state (active button)
+    loadCartState: async () => {
+        try {
+            const response = await fetch('/api/cart-ids/');
+            const data = await response.json();
+
+            const ids = data.ids || [];
+
+            document.querySelectorAll('.add-to-cart-btn, .add-to-cart').forEach(btn => {
+                const productId = parseInt(btn.dataset.id);
+
+                if (ids.includes(productId)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+        } catch (error) {
+            console.error('Cart load error:', error);
+        }
+    },
+
+    // Get cart total
     getCartTotal: () => {
         const totalElement = document.getElementById('cartTotal');
         if (totalElement) {
@@ -126,6 +148,7 @@ const CartService = {
     proceedToCheckout: () => {
         window.location.href = '/checkout/';
     }
+
 };
 
 window.CartService = CartService;

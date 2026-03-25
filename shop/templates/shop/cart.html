@@ -207,7 +207,7 @@
                 <div class="cart-item-actions">
                     <div class="quantity-control">
                         <button class="quantity-btn"
-                            onclick="updateQuantity({{ item.product.product_id }}, '{{ item.size }}', {{ item.quantity|add:"
+                            onclick="updateQuantity({{ item.product.product_id }}, '{{ item.size }}', {{ item.quantity|add: "
                             -1" }})">-</button>
                         <input type="number" class="quantity-input" value="{{ item.quantity }}" min="1"
                             onchange="updateQuantity({{ item.product.product_id }}, '{{ item.size }}', this.value)">

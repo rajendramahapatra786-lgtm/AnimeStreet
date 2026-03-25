@@ -164,3 +164,27 @@
 .search-box {
     width: 350px;
 }
+
+/* ===== CART & WISHLIST BADGE FIX ===== */
+
+.action-icon {
+    position: relative !important;
+    display: inline-block;
+}
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #ff4757;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1;
+    display: inline-block !important;
+    z-index: 9999;
+}

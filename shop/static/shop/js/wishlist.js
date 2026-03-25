@@ -1,6 +1,7 @@
 // wishlist.js - Wishlist functionality with Django API
 
 const WishlistService = {
+
     // Add to wishlist
     addToWishlist: async (productId) => {
         try {
@@ -14,12 +15,19 @@ const WishlistService = {
                     product_id: parseInt(productId)
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 Helpers.showNotification(data.message, 'success');
-                WishlistService.updateWishlistCount();
+
+                // 🔥 INSTANT COUNT
+                WishlistService.incrementWishlistCount();
+
+                // ✅ sync + UI state
+                await WishlistService.updateWishlistCount();
+                await WishlistService.loadWishlistState();
+
                 return true;
             } else {
                 Helpers.showNotification(data.message, 'error');
@@ -45,12 +53,19 @@ const WishlistService = {
                     product_id: parseInt(productId)
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 Helpers.showNotification(data.message, 'success');
-                WishlistService.updateWishlistCount();
+
+                // 🔥 DECREASE COUNT
+                WishlistService.decrementWishlistCount();
+
+                // ✅ sync + UI state
+                await WishlistService.updateWishlistCount();
+                await WishlistService.loadWishlistState();
+
                 return true;
             } else {
                 Helpers.showNotification(data.message, 'error');
@@ -63,27 +78,64 @@ const WishlistService = {
         }
     },
 
-    // Check if in wishlist (from button active class)
-    isInWishlist: (productId) => {
-        const btn = document.querySelector(`.wishlist-btn[data-id="${productId}"]`);
-        return btn ? btn.classList.contains('active') : false;
+    // 🔥 Load state (active heart)
+    loadWishlistState: async () => {
+        try {
+            const response = await fetch('/api/wishlist-ids/');
+            const data = await response.json();
+
+            const ids = data.ids || [];
+
+            document.querySelectorAll('.wishlist-btn').forEach(btn => {
+                const productId = parseInt(btn.dataset.id);
+
+                if (ids.includes(productId)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+        } catch (error) {
+            console.error('Wishlist load error:', error);
+        }
     },
 
-    // Update wishlist count display
-    updateWishlistCount: () => {
-        const wishlistItems = document.querySelectorAll('.wishlist-item');
-        const count = wishlistItems.length;
-        
-        const wishlistBadges = document.querySelectorAll('#wishlistCount');
-        wishlistBadges.forEach(badge => {
-            if (badge) {
+    // 🔥 Update count from backend
+    updateWishlistCount: async () => {
+        try {
+            const response = await fetch('/api/wishlist-count/');
+            const data = await response.json();
+
+            const count = data.count || 0;
+
+            document.querySelectorAll('#wishlistCount').forEach(badge => {
                 badge.textContent = count;
-                if (count > 0) {
-                    badge.style.display = 'inline-block';
-                } else {
-                    badge.style.display = 'none';
-                }
-            }
+                badge.style.display = count > 0 ? 'inline-block' : 'none';
+            });
+
+        } catch (error) {
+            console.error('Wishlist count error:', error);
+        }
+    },
+
+    // 🔥 Instant increase
+    incrementWishlistCount: () => {
+        document.querySelectorAll('#wishlistCount').forEach(badge => {
+            let count = parseInt(badge.textContent) || 0;
+            count += 1;
+            badge.textContent = count;
+            badge.style.display = 'inline-block';
+        });
+    },
+
+    // 🔥 Instant decrease
+    decrementWishlistCount: () => {
+        document.querySelectorAll('#wishlistCount').forEach(badge => {
+            let count = parseInt(badge.textContent) || 0;
+            count = Math.max(0, count - 1);
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'inline-block' : 'none';
         });
     },
 

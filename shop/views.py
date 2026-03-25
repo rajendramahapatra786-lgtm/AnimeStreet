@@ -7,9 +7,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 import json
 from decimal import Decimal 
+from django.http import JsonResponse
+from .models import CartItem
 
 from .models import Category, Product, Cart, CartItem, Wishlist, WishlistItem, Order, OrderItem
 from .forms import SignupForm
+
+
+from django.http import JsonResponse
+from .models import WishlistItem
+
 # Create your views here.
 
 def index(request):
@@ -51,6 +58,14 @@ def watches(request):
     return render(request, 'shop/watches.html', context)
 
 # ==================== AUTHENTICATION VIEWS ====================
+
+
+# def get_cart_ids(request):
+#     if request.user.is_authenticated:
+#         items = Cart.objects.filter(user=request.user).values_list('product_id', flat=True)
+#         return JsonResponse({'ids': list(items)})
+#     return JsonResponse({'ids': []})
+
 
 def login_view(request):
     """User login page"""
@@ -353,3 +368,48 @@ def place_order(request):
         })
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+
+# ✅ COUNT API
+def wishlist_count(request):
+    if request.user.is_authenticated:
+        from .models import Wishlist, WishlistItem
+
+        try:
+            wishlist = Wishlist.objects.get(user=request.user)
+            count = WishlistItem.objects.filter(wishlist=wishlist).count()
+        except Wishlist.DoesNotExist:
+            count = 0
+    else:
+        count = 0
+
+    return JsonResponse({'count': count})
+
+# ✅ IDS API (VERY IMPORTANT)
+def wishlist_ids(request):
+    if request.user.is_authenticated:
+        from .models import Wishlist, WishlistItem
+
+        try:
+            wishlist = Wishlist.objects.get(user=request.user)
+            ids = list(
+                WishlistItem.objects.filter(wishlist=wishlist)
+                .values_list('product__product_id', flat=True)
+            )
+        except Wishlist.DoesNotExist:
+            ids = []
+    else:
+        ids = []
+
+    return JsonResponse({'ids': ids})
+
+def cart_ids(request):
+    if request.user.is_authenticated:
+        ids = list(
+            CartItem.objects.filter(cart__user=request.user)
+            .values_list('product__product_id', flat=True)
+        )
+    else:
+        ids = []
+
+    return JsonResponse({'ids': ids})
