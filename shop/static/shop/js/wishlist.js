@@ -35,7 +35,7 @@ const WishlistService = {
             }
         } catch (error) {
             console.error('Error:', error);
-            Helpers.showNotification('Error adding to wishlist', 'error');
+            Helpers.showNotification('Please log in to add items to your wishlist', 'error');
             return false;
         }
     },

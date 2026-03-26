@@ -1,0 +1,168 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="otp-wrapper">
+
+    <div class="otp-card">
+
+        <!-- Anime Image -->
+        <div class="otp-image">
+            <img src="{% static 'shop/images/anime/anime_otp.jpeg' %}" alt="anime">
+        </div>
+
+        <h2>Verify Your OTP 🔐</h2>
+        <p class="sub-text">We sent a code to your email</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- OTP BOXES -->
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+            </div>
+
+            <!-- Hidden field -->
+            <input type="hidden" name="otp" id="finalOtp">
+
+            <button type="submit" class="verify-btn">Verify</button>
+        </form>
+
+        <p class="resend">Didn't receive code? <span>Resend</span></p>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.otp-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+}
+
+.otp-card {
+    background: #111827;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    animation: fadeIn 0.6s ease;
+}
+
+.otp-card h2 {
+    color: #fff;
+}
+
+.sub-text {
+    color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.otp-inputs {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.otp-box {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid #374151;
+    background: #1f2937;
+    color: white;
+    transition: 0.3s;
+}
+
+.otp-box:focus {
+    border-color: #ff4d6d;
+    box-shadow: 0 0 10px #ff4d6d;
+}
+
+.verify-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ff4d6d;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.verify-btn:hover {
+    background: #ff1e4d;
+}
+
+.resend {
+    margin-top: 15px;
+    color: #9ca3af;
+}
+
+.resend span {
+    color: #ff4d6d;
+    cursor: pointer;
+}
+
+.alert {
+    color: #f87171;
+    margin-bottom: 10px;
+}
+
+/* Anime Image */
+.otp-image img {
+    width: 140px;
+    margin-bottom: 5px;
+    animation: float 3s ease-in-out infinite;
+    rotate: -90deg;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const inputs = document.querySelectorAll(".otp-box");
+const finalOtp = document.getElementById("finalOtp");
+
+inputs.forEach((input, index) => {
+    input.addEventListener("input", () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+        }
+
+        let otp = "";
+        inputs.forEach(i => otp += i.value);
+        finalOtp.value = otp;
+    });
+});
+</script>
+{% endblock %}

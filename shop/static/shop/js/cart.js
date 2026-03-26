@@ -37,7 +37,7 @@ const CartService = {
             }
         } catch (error) {
             console.error('Error:', error);
-            Helpers.showNotification('Error adding to cart', 'error');
+            Helpers.showNotification('Please log in to add items to your cart', 'error');
             return false;
         }
     },

@@ -17,6 +17,12 @@ from .forms import SignupForm
 from django.http import JsonResponse
 from .models import WishlistItem
 
+import random
+from django.core.mail import EmailMultiAlternatives
+from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 # Create your views here.
 
 def index(request):
@@ -86,25 +92,95 @@ def login_view(request):
     
     return render(request, 'shop/login.html')
 
+
 def signup_view(request):
-    """User registration page"""
     if request.user.is_authenticated:
         return redirect('shop:index')
     
     if request.method == 'POST':
         form = SignupForm(request.POST)
+
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Account created successfully! Welcome to AnimeStreet!')
-            return redirect('shop:index')
+            otp = random.randint(1000, 9999)
+
+            # Store in session
+            request.session['signup_data'] = form.cleaned_data
+            request.session['otp'] = otp
+
+            email = form.cleaned_data.get('email')
+
+            # ✅ EMAIL CODE INSIDE HERE
+            subject = "🔐 AnimeStreet OTP Verification"
+
+            text_content = f"""
+Hi 👋,
+
+Your OTP for AnimeStreet is: {otp}
+
+This code is valid for 5 minutes.
+
+- AnimeStreet Team
+"""
+
+            html_content = f"""
+<div style="font-family: Arial; padding: 20px; background:#f4f4f4;">
+    <div style="max-width:500px; margin:auto; background:white; padding:20px; border-radius:10px; text-align:center;">
+        <h2 style="color:#ff4d6d;">AnimeStreet 🔐</h2>
+        <p>Your OTP code is:</p>
+        <h1 style="letter-spacing:6px;">{otp}</h1>
+        <p>This OTP is valid for <b>5 minutes</b>.</p>
+    </div>
+</div>
+"""
+
+            email_msg = EmailMultiAlternatives(
+                subject,
+                text_content,
+                "AnimeStreet <supportanimestreet@gmail.com>",
+                [email]
+            )
+
+            email_msg.attach_alternative(html_content, "text/html")
+            email_msg.send()
+
+            return redirect('shop:verify_signup_otp')
+
         else:
             for error in form.errors.values():
                 messages.error(request, error)
+
     else:
         form = SignupForm()
-    
+
     return render(request, 'shop/signup.html', {'form': form})
+
+
+def verify_signup_otp(request):
+    if request.method == "POST":
+        user_otp = request.POST.get('otp')
+
+        if str(user_otp) == str(request.session.get('otp')):
+
+            data = request.session.get('signup_data')
+
+            user = User.objects.create_user(
+                username=data['username'],
+                email=data['email'],
+                password=data['password1']
+            )
+
+            messages.success(request, "Account created successfully 🎉")
+
+            # Clear session
+            request.session.pop('otp', None)
+            request.session.pop('signup_data', None)
+
+            return redirect('shop:login')
+
+        else:
+            messages.error(request, "Invalid OTP ❌")
+
+    return render(request, 'shop/verify_otp.html')
 
 def logout_view(request):
     """User logout"""

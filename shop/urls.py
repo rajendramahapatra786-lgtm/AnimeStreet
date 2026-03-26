@@ -34,4 +34,6 @@ urlpatterns = [
     path('api/wishlist-count/', views.wishlist_count),
     path('api/wishlist-ids/', views.wishlist_ids),
     path('api/cart-ids/', views.cart_ids),
+
+    path('verify-otp/', views.verify_signup_otp, name='verify_signup_otp'),
 ]
