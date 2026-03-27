@@ -76,213 +76,51 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const products = Array.from(document.querySelectorAll('.product-card'));
-        const grid = document.getElementById('bagsGrid');
-        const sortSelect = document.getElementById('sortBy');
-        const resetBtn = document.getElementById('resetFilters');
-        
-        let currentSort = 'default';
-        
-        // Sort products
-        function sortProducts(productsList, sortBy) {
-            const sorted = [...productsList];
-            
-            switch(sortBy) {
-                case 'price-low':
-                    return sorted.sort((a, b) => {
-                        const priceA = parseFloat(a.querySelector('.product-price').textContent.replace('₹', ''));
-                        const priceB = parseFloat(b.querySelector('.product-price').textContent.replace('₹', ''));
-                        return priceA - priceB;
-                    });
-                case 'price-high':
-                    return sorted.sort((a, b) => {
-                        const priceA = parseFloat(a.querySelector('.product-price').textContent.replace('₹', ''));
-                        const priceB = parseFloat(b.querySelector('.product-price').textContent.replace('₹', ''));
-                        return priceB - priceA;
-                    });
-                default:
-                    return sorted;
-            }
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const grid = document.getElementById('bagsGrid');
+    const sortSelect = document.getElementById('sortBy');
+    const resetBtn = document.getElementById('resetFilters');
+
+    let currentSort = 'default';
+
+    function getProducts() {
+        return Array.from(document.querySelectorAll('.product-card'));
+    }
+
+    function renderProducts() {
+        let products = getProducts();
+        let filtered = FilterUtils.sortProducts(products, currentSort);
+
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div>No products found</div>';
+            return;
         }
-        
-        // Render products
-        function renderProducts() {
-            let filtered = sortProducts(products, currentSort);
-            
-            if (grid) {
-                if (filtered.length === 0) {
-                    grid.innerHTML = '<div class="no-products">No products found</div>';
-                    return;
-                }
-                
-                grid.innerHTML = '';
-                filtered.forEach(product => {
-                    grid.appendChild(product.cloneNode(true));
-                });
-                
-                // Reattach event listeners
-                attachEventListeners();
-            }
-        }
-        
-        // Attach event listeners
-        function attachEventListeners() {
-            // Add to cart buttons
-            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-                btn.removeEventListener('click', handleAddToCart);
-                btn.addEventListener('click', handleAddToCart);
-            });
-            
-            // Wishlist buttons
-            document.querySelectorAll('.wishlist-btn').forEach(btn => {
-                btn.removeEventListener('click', handleWishlist);
-                btn.addEventListener('click', handleWishlist);
-            });
-        }
-        
-        // Handle add to cart
-        async function handleAddToCart(event) {
-            event.stopPropagation();
-            const btn = event.currentTarget;
-            const productCard = btn.closest('.product-card');
-            const productId = productCard.dataset.id;
-            
-            await addToCart(productId, 'One Size');
-        }
-        
-        // Handle wishlist
-        async function handleWishlist(event) {
-            event.stopPropagation();
-            const btn = event.currentTarget;
-            const productCard = btn.closest('.product-card');
-            const productId = productCard.dataset.id;
-            
-            await toggleWishlist(productId, btn);
-        }
-        
-        // Add to cart API
-        async function addToCart(productId, size) {
-            try {
-                const response = await fetch('/api/add-to-cart/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify({
-                        product_id: parseInt(productId),
-                        size: size,
-                        quantity: 1
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showNotification(data.message, 'success');
-                    const cartBadge = document.getElementById('cartCount');
-                    if (cartBadge) {
-                        cartBadge.textContent = data.cart_count;
-                    }
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showNotification('Please log in to add items to your cart', 'error');
-            }
-        }
-        
-        // Toggle wishlist
-        async function toggleWishlist(productId, btn) {
-            const isActive = btn.classList.contains('active');
-            const url = isActive ? '/api/remove-from-wishlist/' : '/api/add-to-wishlist/';
-            
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify({
-                        product_id: parseInt(productId)
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    btn.classList.toggle('active');
-                    showNotification(data.message, 'success');
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showNotification('Error updating wishlist', 'error');
-            }
-        }
-        
-        // Show notification
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                padding: 12px 24px;
-                border-radius: 8px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease;
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // Sort event listener
-        if (sortSelect) {
-            sortSelect.addEventListener('change', (e) => {
-                currentSort = e.target.value;
-                renderProducts();
-            });
-        }
-        
-        // Reset filters
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                currentSort = 'default';
-                if (sortSelect) sortSelect.value = 'default';
-                renderProducts();
-            });
-        }
-        
-        // Initial render
-        renderProducts();
-    });
-    
-    // Add animation style
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-    document.head.appendChild(style);
+
+        filtered.forEach(p => {
+            const clone = p.cloneNode(true);
+            grid.appendChild(clone);
+        });
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            renderProducts();
+        });
+    }
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            currentSort = 'default';
+            sortSelect.value = 'default';
+            renderProducts();
+        });
+    }
+
+    renderProducts();
+});
 </script>
 {% endblock %}
