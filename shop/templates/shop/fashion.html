@@ -25,7 +25,7 @@
                 <option value="rating">Top Rated</option>
             </select>
         </div>
-        
+
         <div class="filter-group">
             <label>Category:</label>
             <div class="category-buttons">
@@ -50,7 +50,7 @@
         <div class="product-card" data-id="{{ product.product_id }}" data-category="{{ product.sub_category }}">
             <div class="product-image">
                 {% if product.image %}
-               <img src="{% static product.image %}" alt="{{ product.name }}">
+                <img src="{% static product.image %}" alt="{{ product.name }}">
                 {% else %}
                 <img src="{% static product.image %}" alt="{{ product.name }}">
                 {% endif %}
@@ -67,19 +67,17 @@
                 <div class="product-rating">
                     <span class="stars">
                         {% for i in "12345"|make_list %}
-                            {% if forloop.counter <= product.rating %}
-                                <i class="fas fa-star"></i>
-                            {% elif forloop.counter|add:"-0.5" <= product.rating %}
-                                <i class="fas fa-star-half-alt"></i>
-                            {% else %}
+                        {% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>
+                            {% elif forloop.counter|add:"-0.5" <= product.rating %} <i class="fas fa-star-half-alt"></i>
+                                {% else %}
                                 <i class="far fa-star"></i>
-                            {% endif %}
-                        {% endfor %}
+                                {% endif %}
+                                {% endfor %}
                     </span>
                     <span class="reviews">({{ product.reviews }})</span>
                 </div>
                 <div class="product-price">₹{{ product.price|floatformat:0 }}</div>
-                
+
                 <!-- Size Selector -->
                 {% if product.sizes %}
                 <div class="size-selector">
@@ -91,7 +89,7 @@
                     </div>
                 </div>
                 {% endif %}
-                
+
                 <button class="add-to-cart-btn" data-id="{{ product.product_id }}">
                     <i class="fas fa-shopping-cart"></i> Add to Cart
                 </button>
@@ -104,53 +102,60 @@
 
 {% block extra_js %}
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
-    const products = Array.from(document.querySelectorAll('.product-card'));
-    const grid = document.getElementById('fashionProductsGrid');
-    const sortSelect = document.getElementById('sortBy');
-    const resetBtn = document.getElementById('resetFilters');
+        const products = Array.from(document.querySelectorAll('.product-card'));
+        const grid = document.getElementById('fashionProductsGrid');
+        const sortSelect = document.getElementById('sortBy');
+        const resetBtn = document.getElementById('resetFilters');
 
-    let currentType = 'all';
-    let currentSort = 'default';
+        let currentType = 'all';
+        let currentSort = 'default';
 
-    function render() {
-        let filtered = FilterUtils.filterFashionByType(products, currentType);
-        filtered = FilterUtils.sortProducts(filtered, currentSort);
+        function render() {
+            let filtered = FilterUtils.filterFashionByType(products, currentType);
+            filtered = FilterUtils.sortProducts(filtered, currentSort);
 
-        grid.innerHTML = '';
+            grid.innerHTML = '';
 
-        if (filtered.length === 0) {
-            grid.innerHTML = '<p>No products found</p>';
-            return;
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p>No products found</p>';
+                return;
+            }
+
+            filtered.forEach(p => grid.appendChild(p));
         }
 
-        filtered.forEach(p => grid.appendChild(p));
-    }
+        // CATEGORY
+        // CATEGORY
+        const categoryButtons = document.querySelectorAll('.category-btn');
 
-    // CATEGORY
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            currentType = btn.dataset.type;
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+
+                categoryButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                currentType = btn.dataset.type;
+                render();
+            });
+        });
+
+        // SORT
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
             render();
         });
-    });
 
-    // SORT
-    sortSelect.addEventListener('change', (e) => {
-        currentSort = e.target.value;
+        // RESET
+        resetBtn.addEventListener('click', () => {
+            currentType = 'all';
+            currentSort = 'default';
+            sortSelect.value = 'default';
+            render();
+        });
+
         render();
     });
-
-    // RESET
-    resetBtn.addEventListener('click', () => {
-        currentType = 'all';
-        currentSort = 'default';
-        sortSelect.value = 'default';
-        render();
-    });
-
-    render();
-});
 </script>
 {% endblock %}
