@@ -290,10 +290,20 @@
                 <p><strong>Name:</strong> {{ user.first_name|default:user.username }}</p>
                 <p><strong>Username:</strong> {{ user.username }}</p>
                 <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Phone:</strong> {{ user.phone|default:"Not provided" }}</p>
-                <p><strong>Address:</strong> {{ user.address|default:"Not provided" }}</p>
-                <p><strong>Member since:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+                <p><strong>Phone:</strong> {{ user.profile.phone|default:"Not provided" }}</p>
 
+                <p><strong>Address:</strong>
+                    {{ user.profile.address|default:"Not provided" }}
+                    {% if user.profile.city %}, {{ user.profile.city }}{% endif %}
+                    {% if user.profile.state %}, {{ user.profile.state }}{% endif %}
+                    {% if user.profile.pincode %} - {{ user.profile.pincode }}{% endif %}
+                </p>
+                <p><strong>Member since:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+                <div class="action-buttons">
+                    <a href="{% url 'shop:edit_profile' %}" class="checkout-btn">
+                        Edit Profile
+                    </a>
+                </div>
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-number">{{ total_orders }}</div>

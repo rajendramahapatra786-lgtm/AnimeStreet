@@ -36,4 +36,6 @@ urlpatterns = [
     path('api/cart-ids/', views.cart_ids),
 
     path('verify-otp/', views.verify_signup_otp, name='verify_signup_otp'),
+
+    path('edit-profile/', views.edit_profile, name='edit_profile'),
 ]

@@ -22,6 +22,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from .models import Profile
+from .models import Cart, CartItem
 
 # Create your views here.
 
@@ -217,21 +219,19 @@ def profile(request):
 
 @login_required
 def cart(request):
-    """Shopping cart page"""
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = cart.items.select_related('product').all()
     
     subtotal = cart.get_total()
-    tax = subtotal * Decimal('0.18')  # Fixed: using Decimal instead of float
+    tax = subtotal * Decimal('0.18')
     total = subtotal + tax
     
-    context = {
+    return render(request, 'shop/cart.html', {
         'cart_items': cart_items,
         'subtotal': subtotal,
         'tax': tax,
         'total': total,
-    }
-    return render(request, 'shop/cart.html', context)
+    })
 
 @login_required
 def wishlist(request):
@@ -243,26 +243,22 @@ def wishlist(request):
 
 @login_required
 def checkout(request):
-    """Checkout page"""
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = cart.items.select_related('product').all()
     
     if not cart_items.exists():
-        messages.warning(request, 'Your cart is empty!')
         return redirect('shop:cart')
     
     subtotal = cart.get_total()
-    tax = subtotal * Decimal('0.18')  # Fixed: using Decimal instead of float
+    tax = subtotal * Decimal('0.18')
     total = subtotal + tax
     
-    context = {
+    return render(request, 'shop/checkout.html', {
         'cart_items': cart_items,
         'subtotal': subtotal,
         'tax': tax,
         'total': total,
-    }
-    return render(request, 'shop/checkout.html', context)
-
+    })
 # ==================== API ENDPOINTS ====================
 
 @csrf_exempt
@@ -489,3 +485,66 @@ def cart_ids(request):
         ids = []
 
     return JsonResponse({'ids': ids})
+
+
+def edit_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        profile.phone = request.POST.get("phone")
+        profile.address = request.POST.get("address")
+        profile.city = request.POST.get("city")
+        profile.state = request.POST.get("state")
+        profile.pincode = request.POST.get("pincode")
+
+        profile.save()
+        return redirect("shop:profile")
+    return render(request, "shop/edit_profile.html", {"profile": profile})
+
+# def checkout(request):
+#     profile = request.user.profile
+
+#     if not profile.address or not profile.pincode:
+#         return redirect("edit_profile")
+
+#     return render(request, "shop/checkout.html", {"profile": profile})
+
+# def add_to_cart(request):
+#     data = json.loads(request.body)
+
+#     product_id = data.get('product_id')
+#     size = data.get('size')
+
+#     cart, created = Cart.objects.get_or_create(user=request.user)
+
+#     item, created = CartItem.objects.get_or_create(
+#         cart=cart,
+#         product_id=product_id,
+#         size=size
+#     )
+
+#     if not created:
+#         item.quantity += 1
+#         item.save()
+
+#     return JsonResponse({'success': True})
+
+# def cart(request):
+#     cart, created = Cart.objects.get_or_create(user=request.user)
+
+#     cart_items = cart.items.all()
+
+#     return render(request, 'shop/cart.html', {
+#         'cart_items': cart_items
+#     })
+
+# def checkout(request):
+#     cart, created = Cart.objects.get_or_create(user=request.user)
+#     cart_items = cart.items.all()
+
+#     if not cart_items:
+#         return redirect('shop:cart')
+
+#     return render(request, 'shop/checkout.html', {
+#         'cart_items': cart_items
+#     })

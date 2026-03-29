@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import uuid
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Create your models here.
 
@@ -112,3 +116,32 @@ class OrderItem(models.Model):
     
     def get_total(self):
         return self.price * self.quantity
+    
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    phone = models.CharField(max_length=15, blank=True)
+    address = models.TextField(blank=True)
+
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    pincode = models.CharField(max_length=10, blank=True)
+
+    def __str__(self):
+        return self.user.username    
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)  
+
+
+# class CartItem(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     product = models.ForeignKey('Product', on_delete=models.CASCADE)
+#     quantity = models.IntegerField(default=1)
+#     size = models.CharField(max_length=10)
+
+#     def __str__(self):
+#         return self.product.name          

@@ -11,43 +11,43 @@
         background: white;
         border-radius: 12px;
         padding: 30px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    
+
     .checkout-header {
         text-align: center;
         margin-bottom: 30px;
     }
-    
+
     .checkout-header i {
         font-size: 3rem;
         color: #28a745;
         margin-bottom: 15px;
     }
-    
+
     .checkout-header h2 {
         color: #28a745;
         margin-bottom: 10px;
     }
-    
+
     .order-details {
         margin: 30px 0;
         padding: 20px;
         background: #f8f9fa;
         border-radius: 8px;
     }
-    
+
     .order-row {
         display: flex;
         justify-content: space-between;
         padding: 10px 0;
         border-bottom: 1px solid #e9ecef;
     }
-    
+
     .order-row:last-child {
         border-bottom: none;
     }
-    
+
     .order-row.total {
         font-weight: 700;
         font-size: 1.2rem;
@@ -56,7 +56,7 @@
         padding-top: 10px;
         border-top: 2px solid #ff6b6b;
     }
-    
+
     .delivery-info {
         margin: 20px 0;
         padding: 15px;
@@ -64,11 +64,11 @@
         border-radius: 8px;
         color: #2e7d32;
     }
-    
+
     .delivery-info i {
         margin-right: 10px;
     }
-    
+
     .home-btn {
         display: inline-block;
         padding: 12px 30px;
@@ -79,40 +79,42 @@
         margin-top: 20px;
         transition: background 0.3s ease;
     }
-    
+
     .home-btn:hover {
         background: #ff4757;
     }
-    
+
     .loading-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.7);
+        background: rgba(0, 0, 0, 0.7);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 9999;
         display: none;
     }
-    
+
     .loading-spinner {
         background: white;
         padding: 30px;
         border-radius: 12px;
         text-align: center;
     }
-    
+
     .loading-spinner i {
         font-size: 2rem;
         color: #ff6b6b;
         animation: spin 1s linear infinite;
     }
-    
+
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
 {% endblock %}
@@ -127,26 +129,26 @@
                 <h2>Order Placed Successfully!</h2>
                 <p>Thank you for shopping with AnimeStreet</p>
             </div>
-            
+
             <div class="delivery-info">
-                <i class="fas fa-truck"></i> 
+                <i class="fas fa-truck"></i>
                 Estimated Delivery: 3-5 business days
             </div>
-            
+
             <div class="order-details" id="orderDetails">
                 <!-- Order details will be filled here -->
             </div>
-            
+
             <div style="text-align: center;">
                 <a href="{% url 'shop:index' %}" class="home-btn">
                     <i class="fas fa-home"></i> Continue Shopping
                 </a>
             </div>
         </div>
-        
+
         <div class="checkout-container" id="checkoutForm">
             <h2 style="text-align: center; margin-bottom: 30px;">Checkout</h2>
-            
+
             <!-- Order Summary -->
             <div class="order-details">
                 <h3 style="margin-bottom: 15px;">Order Summary</h3>
@@ -173,18 +175,21 @@
                     <span>₹{{ total|floatformat:0 }}</span>
                 </div>
             </div>
-            
+
             <!-- Delivery Address -->
             <div class="delivery-info" style="background: #fff3e0; color: #ed6c02;">
                 <i class="fas fa-map-marker-alt"></i>
-                <strong>Delivery Address:</strong><br>
-                {{ user.first_name|default:user.username }}<br>
-                {% if user.email %}{{ user.email }}<br>{% endif %}
-                {% if user.address %}{{ user.address }}{% else %}Please update your address in profile{% endif %}
+                <p><b>Delivery Address:</b></p>
+
+                <p>
+                    {{ user.profile.address }} <br>
+                    {{ user.profile.city }}, {{ user.profile.state }} - {{ user.profile.pincode }}
+                </p>
             </div>
-            
+
             <!-- Place Order Button -->
-            <button class="checkout-btn" id="placeOrderBtn" style="width: 100%; padding: 15px; background: #ff6b6b; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">
+            <button class="checkout-btn" id="placeOrderBtn"
+                style="width: 100%; padding: 15px; background: #ff6b6b; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">
                 Place Order
             </button>
         </div>
@@ -210,21 +215,21 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const placeOrderBtn = document.getElementById('placeOrderBtn');
         const checkoutForm = document.getElementById('checkoutForm');
         const orderConfirmation = document.getElementById('orderConfirmation');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const orderDetails = document.getElementById('orderDetails');
-        
+
         if (placeOrderBtn) {
             placeOrderBtn.addEventListener('click', placeOrder);
         }
-        
+
         async function placeOrder() {
             // Show loading overlay
             loadingOverlay.style.display = 'flex';
-            
+
             try {
                 const response = await fetch('/api/place-order/', {
                     method: 'POST',
@@ -233,42 +238,42 @@
                         'X-CSRFToken': csrftoken
                     }
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (data.success) {
                     // Get cart items for display
                     const cartRows = document.querySelectorAll('.order-row');
                     let itemsHtml = '';
-                    
+
                     cartRows.forEach(row => {
                         if (!row.classList.contains('total')) {
                             itemsHtml += row.outerHTML;
                         }
                     });
-                    
+
                     // Add subtotal, tax, and total
                     const subtotalRow = document.querySelector('.order-row:has(span:first-child:contains("Subtotal"))');
                     const taxRow = document.querySelector('.order-row:has(span:first-child:contains("Tax"))');
                     const totalRow = document.querySelector('.order-row.total');
-                    
+
                     if (subtotalRow) itemsHtml += subtotalRow.outerHTML;
                     if (taxRow) itemsHtml += taxRow.outerHTML;
                     if (totalRow) itemsHtml += totalRow.outerHTML;
-                    
+
                     // Populate order details
                     orderDetails.innerHTML = itemsHtml;
-                    
+
                     // Show confirmation, hide form
                     checkoutForm.style.display = 'none';
                     orderConfirmation.style.display = 'block';
-                    
+
                     // Clear cart count in navbar
                     const cartBadge = document.getElementById('cartCount');
                     if (cartBadge) {
                         cartBadge.textContent = '0';
                     }
-                    
+
                     showNotification('Order placed successfully!', 'success');
                 } else {
                     showNotification(data.message, 'error');
@@ -281,12 +286,12 @@
                 loadingOverlay.style.display = 'none';
             }
         }
-        
+
         // Helper function for contains selector
-        jQuery.expr[':'].contains = function(a, i, m) {
+        jQuery.expr[':'].contains = function (a, i, m) {
             return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
         };
-        
+
         // Show notification
         function showNotification(message, type) {
             const notification = document.createElement('div');
@@ -304,13 +309,13 @@
                 animation: slideIn 0.3s ease;
             `;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.remove();
             }, 3000);
         }
     });
-    
+
     // Add animation style
     const style = document.createElement('style');
     style.textContent = `
