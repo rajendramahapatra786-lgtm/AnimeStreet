@@ -4,68 +4,137 @@
 {% block title %}Edit Profile - AnimeStreet{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div style="max-width: 600px; margin: 50px auto;">
 
-        <h2 style="margin-bottom:20px;">Edit Profile</h2>
+<style>
+    .edit-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+    }
+
+    .edit-card {
+        width: 100%;
+        max-width: 500px;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        transition: 0.3s;
+    }
+
+    .edit-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+
+    .edit-title {
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #ff4d6d;
+        box-shadow: 0 0 5px rgba(255, 77, 109, 0.3);
+    }
+
+    .save-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #ff4d6d, #ff758c);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .save-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="edit-container">
+    <div class="edit-card">
+
+        <h2 class="edit-title">Edit Profile</h2>
 
         <form method="POST">
             {% csrf_token %}
 
-            <!-- Phone -->
-            <input type="text" name="phone" placeholder="Phone" value="{{ profile.phone }}" class="form-control"
-                style="margin-bottom:10px; padding:10px; width:100%;">
+            <div class="form-group">
+                <input type="text" name="phone" placeholder="Phone"
+                    value="{{ profile.phone }}" class="form-control">
+            </div>
 
-            <!-- Address -->
-            <textarea name="address" placeholder="Address" class="form-control"
-                style="margin-bottom:10px; padding:10px; width:100%;">{{ profile.address }}</textarea>
+            <div class="form-group">
+                <textarea name="address" placeholder="Address"
+                    class="form-control">{{ profile.address }}</textarea>
+            </div>
 
-            <!-- City -->
-            <input type="text" name="city" placeholder="City" value="{{ profile.city }}" class="form-control"
-                style="margin-bottom:10px; padding:10px; width:100%;">
+            <div class="form-group">
+                <input type="text" name="city" placeholder="City"
+                    value="{{ profile.city }}" class="form-control">
+            </div>
 
-            <!-- State Dropdown -->
-            <select name="state" class="form-control" style="margin-bottom:10px; padding:10px; width:100%;">
+            <div class="form-group">
+                <select name="state" class="form-control">
+                    <option value="">Select State</option>
 
-                <option value="">Select State</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                </select>
+            </div>
 
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
-                <option value="West Bengal">West Bengal</option>
+            <div class="form-group">
+                <input type="text" name="pincode" placeholder="Pincode"
+                    value="{{ profile.pincode }}" class="form-control">
+            </div>
 
-            </select>
-
-            <!-- Pincode -->
-            <input type="text" name="pincode" placeholder="Pincode" value="{{ profile.pincode }}" class="form-control"
-                style="margin-bottom:15px; padding:10px; width:100%;">
-
-            <!-- Save Button -->
-            <button type="submit" class="checkout-btn">
+            <button type="submit" class="save-btn">
                 Save Changes
             </button>
 
@@ -73,4 +142,5 @@
 
     </div>
 </div>
+
 {% endblock %}
