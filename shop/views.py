@@ -336,7 +336,7 @@ def update_cart(request):
             cart_item.delete()
         
         subtotal = cart.get_total()
-        tax = subtotal * 0.18
+        tax = subtotal *  Decimal('0.18')
         total = subtotal + tax
         
         return JsonResponse({
@@ -403,14 +403,14 @@ def remove_from_wishlist(request):
 def place_order(request):
     """API endpoint to place order"""
     if request.method == 'POST':
-        cart = Cart.objects.get(user=request.user)
+        cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = cart.items.select_related('product').all()
         
         if not cart_items.exists():
             return JsonResponse({'success': False, 'message': 'Cart is empty'})
         
         subtotal = cart.get_total()
-        tax = subtotal * 0.18
+        tax = subtotal * Decimal('0.18')
         total = subtotal + tax
         
         # Create order

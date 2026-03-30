@@ -221,6 +221,22 @@
         const orderConfirmation = document.getElementById('orderConfirmation');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const orderDetails = document.getElementById('orderDetails');
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
 
         if (placeOrderBtn) {
             placeOrderBtn.addEventListener('click', placeOrder);
@@ -253,12 +269,12 @@
                     });
 
                     // Add subtotal, tax, and total
-                    const subtotalRow = document.querySelector('.order-row:has(span:first-child:contains("Subtotal"))');
-                    const taxRow = document.querySelector('.order-row:has(span:first-child:contains("Tax"))');
+                    // const subtotalRow = document.querySelector('.order-row:has(span:first-child:contains("Subtotal"))');
+                    // const taxRow = document.querySelector('.order-row:has(span:first-child:contains("Tax"))');
                     const totalRow = document.querySelector('.order-row.total');
 
-                    if (subtotalRow) itemsHtml += subtotalRow.outerHTML;
-                    if (taxRow) itemsHtml += taxRow.outerHTML;
+                    // if (subtotalRow) itemsHtml += subtotalRow.outerHTML;
+                    // if (taxRow) itemsHtml += taxRow.outerHTML;
                     if (totalRow) itemsHtml += totalRow.outerHTML;
 
                     // Populate order details
@@ -288,9 +304,9 @@
         }
 
         // Helper function for contains selector
-        jQuery.expr[':'].contains = function (a, i, m) {
-            return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
-        };
+        // jQuery.expr[':'].contains = function (a, i, m) {
+        //     return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        // };
 
         // Show notification
         function showNotification(message, type) {
@@ -317,8 +333,7 @@
     });
 
     // Add animation style
-    const style = document.createElement('style');
-    style.textContent = `
+const animStyle = document.createElement('style');    animStyle.textContent = `
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -330,6 +345,6 @@
             }
         }
     `;
-    document.head.appendChild(style);
+document.head.appendChild(animStyle);
 </script>
 {% endblock %}
