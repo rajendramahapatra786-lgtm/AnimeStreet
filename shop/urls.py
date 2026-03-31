@@ -38,4 +38,9 @@ urlpatterns = [
     path('verify-otp/', views.verify_signup_otp, name='verify_signup_otp'),
 
     path('edit-profile/', views.edit_profile, name='edit_profile'),
+
+
+    path('admin/orders/', views.admin_orders, name='admin_orders'),
+    path('admin/approve/<int:id>/', views.approve_order, name='approve_order'),
+    path('admin/reject/<int:id>/', views.reject_order, name='reject_order'),
 ]

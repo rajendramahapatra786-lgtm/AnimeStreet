@@ -1,0 +1,52 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<div style="max-width:900px; margin:40px auto;">
+
+<h2>Admin Orders Panel</h2>
+
+<table border="1" cellpadding="10" width="100%">
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Status</th>
+        <th>Screenshot</th>
+        <th>Action</th>
+    </tr>
+
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user.username }}</td>
+        <td>₹{{ order.total_price }}</td>
+        <td>{{ order.payment_method }}</td>
+        <td>{{ order.payment_status }}</td>
+
+        <td>
+            {% if order.payment_screenshot %}
+                <img src="{{ order.payment_screenshot.url }}" width="80">
+            {% else %}
+                No Image
+            {% endif %}
+        </td>
+
+        <td>
+            <a href="{% url 'shop:approve_order' order.id %}">
+                <button style="background:green; color:white;">Approve</button>
+            </a>
+
+            <a href="{% url 'shop:reject_order' order.id %}">
+                <button style="background:red; color:white;">Reject</button>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

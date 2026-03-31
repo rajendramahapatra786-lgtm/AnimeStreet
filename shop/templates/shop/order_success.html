@@ -1,0 +1,292 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<style>
+.success-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    text-align: center;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.loader-container {
+    padding: 40px 0;
+}
+
+.loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #4CAF50;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin: 20px auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.status-text {
+    font-size: 20px;
+    color: #333;
+    margin: 20px 0;
+    font-weight: 500;
+}
+
+/* Success Animation */
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: #4CAF50;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+.success-icon span {
+    font-size: 48px;
+    color: white;
+}
+
+.order-details {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.order-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-detail-row:last-child {
+    border-bottom: none;
+}
+
+.order-detail-label {
+    font-weight: bold;
+    color: #666;
+}
+
+.order-detail-value {
+    color: #333;
+    font-weight: 500;
+}
+
+.total-amount {
+    font-size: 24px;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.button-group {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: #fb641b;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #f85a00;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: #2874f0;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #1a5fcc;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #ddd;
+    color: #666;
+}
+
+.btn-outline:hover {
+    border-color: #fb641b;
+    color: #fb641b;
+}
+
+.processing {
+    display: block;
+}
+
+.success-content {
+    display: none;
+}
+
+.delivery-info {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.delivery-info p {
+    margin: 5px 0;
+    color: #2e7d32;
+}
+
+.tracking-id {
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2874f0;
+    letter-spacing: 1px;
+}
+</style>
+
+<div class="success-container" id="processingContainer">
+    <div class="loader-container">
+        <div class="loader"></div>
+        <div class="status-text" id="statusText">Processing Payment...</div>
+        <p style="color: #666; font-size: 14px;">Please do not refresh the page</p>
+    </div>
+</div>
+
+<div class="success-container" id="successContainer" style="display: none;">
+    <div class="success-icon">
+        <span>✓</span>
+    </div>
+    
+    <h2 style="color: #4CAF50; margin-bottom: 10px;">Order Confirmed! 🎉</h2>
+    <p style="color: #666; margin-bottom: 20px;">Your order has been placed successfully</p>
+    
+    <div class="order-details">
+        <div class="order-detail-row">
+            <span class="order-detail-label">Order ID:</span>
+            <span class="order-detail-value" id="orderId">FLIP123456789</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Order Date:</span>
+            <span class="order-detail-value" id="orderDate"></span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Payment Method:</span>
+            <span class="order-detail-value" id="paymentMethod">UPI</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Transaction ID:</span>
+            <span class="order-detail-value" id="transactionId">TXN12345678</span>
+        </div>
+        <div class="order-detail-row">
+            <span class="order-detail-label">Total Amount:</span>
+            <span class="order-detail-value total-amount" style="font-size: 20px;">₹1,221</span>
+        </div>
+    </div>
+    
+    <div class="delivery-info">
+        <p>🚚 Estimated Delivery: <strong>3-5 business days</strong></p>
+        <p>📦 Your order will be shipped soon</p>
+        <p>🔍 Tracking ID: <span class="tracking-id" id="trackingId">TRK987654321</span></p>
+    </div>
+    
+    <div class="button-group">
+        <a href="/" class="btn btn-primary">Continue Shopping</a>
+        <a href="/my-orders" class="btn btn-secondary">View Orders</a>
+    </div>
+</div>
+
+<script>
+// Get payment details from URL parameters or session storage
+const urlParams = new URLSearchParams(window.location.search);
+const paymentMethod = urlParams.get('payment_method') || localStorage.getItem('paymentMethod') || 'UPI';
+const transactionId = urlParams.get('transaction_id') || localStorage.getItem('transactionId') || 'TXN' + Math.floor(Math.random() * 100000000);
+const orderAmount = urlParams.get('amount') || localStorage.getItem('orderAmount') || '1221';
+
+// Generate random order ID and tracking ID
+const orderId = 'FLIP' + Math.floor(Math.random() * 1000000000);
+const trackingId = 'TRK' + Math.floor(Math.random() * 1000000000);
+
+// Set order date
+const orderDate = new Date();
+const formattedDate = orderDate.toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+});
+
+// Update success page with details
+document.getElementById('orderId').innerText = orderId;
+document.getElementById('orderDate').innerText = formattedDate;
+document.getElementById('paymentMethod').innerText = paymentMethod === 'COD' ? 'Cash on Delivery' : paymentMethod;
+document.getElementById('transactionId').innerText = transactionId;
+document.getElementById('trackingId').innerText = trackingId;
+
+// Multi-step animation
+setTimeout(function() {
+    document.getElementById("statusText").innerHTML = "Verifying Payment...";
+    document.getElementById("statusText").style.color = "#ff9800";
+}, 2000);
+
+setTimeout(function() {
+    document.getElementById("statusText").innerHTML = "Confirming Order...";
+    document.getElementById("statusText").style.color = "#2874f0";
+}, 4000);
+
+setTimeout(function() {
+    // Hide processing, show success
+    document.getElementById("processingContainer").style.display = "none";
+    document.getElementById("successContainer").style.display = "block";
+    
+    // Clear stored data
+    localStorage.removeItem('paymentMethod');
+    localStorage.removeItem('transactionId');
+    localStorage.removeItem('orderAmount');
+}, 6000);
+
+// Store order details for reference
+localStorage.setItem('lastOrderId', orderId);
+localStorage.setItem('lastOrderDate', formattedDate);
+localStorage.setItem('lastOrderAmount', orderAmount);
+</script>
+
+{% endblock %}

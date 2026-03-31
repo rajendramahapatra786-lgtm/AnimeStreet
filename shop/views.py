@@ -25,6 +25,12 @@ User = get_user_model()
 from .models import Profile
 from .models import Cart, CartItem
 
+
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Order
+
+
 # Create your views here.
 
 def index(request):
@@ -202,8 +208,7 @@ def profile(request):
     
     cart_total = cart.get_total()
     total_orders = orders.count()
-    total_spent = sum(order.total_amount for order in orders)
-    
+    total_spent = sum(order.total_price for order in orders)    
     context = {
         'user': request.user,
         'cart_items': cart_items,
@@ -416,10 +421,11 @@ def place_order(request):
         # Create order
         order = Order.objects.create(
             user=request.user,
-            total_amount=total,
+            total_price=total,
             status='processing'
         )
-        
+        send_order_email(order)
+
         # Create order items
         for item in cart_items:
             OrderItem.objects.create(
@@ -436,7 +442,7 @@ def place_order(request):
         return JsonResponse({
             'success': True,
             'message': 'Order placed successfully!',
-            'order_id': str(order.order_id)
+            'order_id': order.id
         })
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
@@ -548,3 +554,57 @@ def edit_profile(request):
 #     return render(request, 'shop/checkout.html', {
 #         'cart_items': cart_items
 #     })
+
+
+@staff_member_required
+def admin_orders(request):
+    orders = Order.objects.all().order_by('-created_at')
+    return render(request, 'shop/admin_orders.html', {'orders': orders})
+
+
+@staff_member_required
+def approve_order(request, id):
+    order = get_object_or_404(Order, id=id)
+    order.payment_status = "Paid"
+    order.status = "processing"
+    order.save()
+    return redirect('shop:admin_orders')
+
+
+@staff_member_required
+def reject_order(request, id):
+    order = get_object_or_404(Order, id=id)
+    order.payment_status = "Rejected"
+    order.status = "cancelled"
+    order.save()
+    return redirect('shop:admin_orders')
+
+
+from django.core.mail import send_mail
+from django.conf import settings
+
+def send_order_email(order):
+    subject = "New Order - AnimeStreet 🛒"
+
+    message = f"""
+New Order Received!
+
+User: {order.user.username}
+Amount: ₹{order.total_price}
+Payment: {order.payment_method}
+Txn ID: {order.transaction_id}
+
+Approve:
+http://127.0.0.1:8000/shop/admin/approve/{order.id}/
+
+Reject:
+http://127.0.0.1:8000/shop/admin/reject/{order.id}/
+"""
+
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,   # same email
+        [settings.EMAIL_HOST_USER], # send to yourself
+        fail_silently=False,
+    )

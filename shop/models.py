@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import uuid
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -88,24 +88,43 @@ class WishlistItem(models.Model):
     class Meta:
         unique_together = ['wishlist', 'product']
 
+
 class Order(models.Model):
-    ORDER_STATUS = [
-        ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('shipped', 'Shipped'),
-        ('delivered', 'Delivered'),
-        ('cancelled', 'Cancelled'),
-    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-    order_id = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=ORDER_STATUS, default='pending')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # 🔥 NEW FIELDS
+    payment_method = models.CharField(max_length=10, default="COD")
+    transaction_id = models.CharField(max_length=100, blank=True, null=True)
+    payment_screenshot = models.ImageField(upload_to='payments/', blank=True, null=True)
+
+    payment_status = models.CharField(max_length=20, default="Pending")
+    status = models.CharField(max_length=20, default="Pending")
+
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
-        return f"Order #{self.order_id}"
+        return f"Order {self.id} - {self.user.username}"
+
+# class Order(models.Model):
+#     ORDER_STATUS = [
+#         ('pending', 'Pending'),
+#         ('processing', 'Processing'),
+#         ('shipped', 'Shipped'),
+#         ('delivered', 'Delivered'),
+#         ('cancelled', 'Cancelled'),
+#     ]
+    
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
+#     order_id = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
+#     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     status = models.CharField(max_length=20, choices=ORDER_STATUS, default='pending')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+    
+    # def __str__(self):
+    #     return f"Order #{self.order_id}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -144,4 +163,5 @@ def create_profile(sender, instance, created, **kwargs):
 #     size = models.CharField(max_length=10)
 
 #     def __str__(self):
-#         return self.product.name          
+#         return self.product.name         
+
