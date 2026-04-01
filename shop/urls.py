@@ -20,6 +20,8 @@ urlpatterns = [
     path('cart/', views.cart, name='cart'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('checkout/', views.checkout, name='checkout'),
+    path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
+    path('order-success/<int:order_id>/', views.order_success, name='order_success'),
     
     # API endpoints
     path('api/add-to-cart/', views.add_to_cart, name='add_to_cart'),
@@ -43,4 +45,7 @@ urlpatterns = [
     path('admin/orders/', views.admin_orders, name='admin_orders'),
     path('admin/approve/<int:id>/', views.approve_order, name='approve_order'),
     path('admin/reject/<int:id>/', views.reject_order, name='reject_order'),
+
+    # path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
+
 ]

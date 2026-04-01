@@ -215,136 +215,60 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const placeOrderBtn = document.getElementById('placeOrderBtn');
-        const checkoutForm = document.getElementById('checkoutForm');
-        const orderConfirmation = document.getElementById('orderConfirmation');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const orderDetails = document.getElementById('orderDetails');
+document.addEventListener('DOMContentLoaded', function () {
+
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
     function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                }
             }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    if (placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', placeOrder);
+    }
+
+    async function placeOrder() {
+        loadingOverlay.style.display = 'flex';
+
+        try {
+            const response = await fetch('/api/place-order/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // 🔥 REDIRECT TO PAYMENT PAGE WITH ORDER ID
+                window.location.href = `/payment/${data.order_id}/`;
+            } else {
+                alert(data.message || "Something went wrong");
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Error placing order");
+        } finally {
+            loadingOverlay.style.display = 'none';
         }
     }
-    return cookieValue;
-}
 
-const csrftoken = getCookie('csrftoken');
-
-        if (placeOrderBtn) {
-            placeOrderBtn.addEventListener('click', placeOrder);
-        }
-
-        async function placeOrder() {
-            // Show loading overlay
-            loadingOverlay.style.display = 'flex';
-
-            try {
-                const response = await fetch('/api/place-order/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    }
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Get cart items for display
-                    const cartRows = document.querySelectorAll('.order-row');
-                    let itemsHtml = '';
-
-                    cartRows.forEach(row => {
-                        if (!row.classList.contains('total')) {
-                            itemsHtml += row.outerHTML;
-                        }
-                    });
-
-                    // Add subtotal, tax, and total
-                    // const subtotalRow = document.querySelector('.order-row:has(span:first-child:contains("Subtotal"))');
-                    // const taxRow = document.querySelector('.order-row:has(span:first-child:contains("Tax"))');
-                    const totalRow = document.querySelector('.order-row.total');
-
-                    // if (subtotalRow) itemsHtml += subtotalRow.outerHTML;
-                    // if (taxRow) itemsHtml += taxRow.outerHTML;
-                    if (totalRow) itemsHtml += totalRow.outerHTML;
-
-                    // Populate order details
-                    orderDetails.innerHTML = itemsHtml;
-
-                    // Show confirmation, hide form
-                    checkoutForm.style.display = 'none';
-                    orderConfirmation.style.display = 'block';
-
-                    // Clear cart count in navbar
-                    const cartBadge = document.getElementById('cartCount');
-                    if (cartBadge) {
-                        cartBadge.textContent = '0';
-                    }
-
-                    showNotification('Order placed successfully!', 'success');
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showNotification('Error placing order. Please try again.', 'error');
-            } finally {
-                // Hide loading overlay
-                loadingOverlay.style.display = 'none';
-            }
-        }
-
-        // Helper function for contains selector
-        // jQuery.expr[':'].contains = function (a, i, m) {
-        //     return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
-        // };
-
-        // Show notification
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                background: ${type === 'success' ? '#28a745' : '#dc3545'};
-                color: white;
-                padding: 12px 24px;
-                border-radius: 8px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease;
-            `;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-    });
-
-    // Add animation style
-const animStyle = document.createElement('style');    animStyle.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-document.head.appendChild(animStyle);
+});
 </script>
 {% endblock %}

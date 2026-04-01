@@ -30,6 +30,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Order
 
+from django.core.mail import send_mail
+from django.conf import settings
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -422,7 +427,7 @@ def place_order(request):
         order = Order.objects.create(
             user=request.user,
             total_price=total,
-            status='processing'
+            status='pending'
         )
         send_order_email(order)
 
@@ -580,9 +585,6 @@ def reject_order(request, id):
     return redirect('shop:admin_orders')
 
 
-from django.core.mail import send_mail
-from django.conf import settings
-
 def send_order_email(order):
     subject = "New Order - AnimeStreet 🛒"
 
@@ -608,3 +610,42 @@ http://127.0.0.1:8000/shop/admin/reject/{order.id}/
         [settings.EMAIL_HOST_USER], # send to yourself
         fail_silently=False,
     )
+
+@login_required
+def payment_page(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == "POST":
+        payment_method = request.POST.get('payment_method')
+
+        order.payment_method = payment_method
+
+        # ✅ UPI FLOW
+        if payment_method == "UPI":
+            order.transaction_id = request.POST.get('transaction_id')
+
+            if request.FILES.get('screenshot'):
+                order.payment_screenshot = request.FILES['screenshot']
+
+            order.payment_status = "Verification"
+            order.status = "pending"
+            order.save()
+
+            # 🔥 UPI → SUCCESS PAGE
+            return redirect('shop:order_success', order_id=order.id)
+
+        # ✅ COD FLOW
+        elif payment_method == "COD":
+            order.payment_status = "Pending"
+            order.status = "processing"
+            order.save()
+
+            # 🔥 COD → PROFILE PAGE (or index)
+            return redirect('shop:profile')   # OR 'shop:index'
+
+    return render(request, 'shop/payment.html', {'order': order})
+
+@login_required
+def order_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'shop/order_success.html', {'order': order})
