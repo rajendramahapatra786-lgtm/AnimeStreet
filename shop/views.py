@@ -649,3 +649,6 @@ def payment_page(request, order_id):
 def order_success(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'shop/order_success.html', {'order': order})
+
+def payment_loading(request):
+    return render(request, 'payment_loading.html')

@@ -215,60 +215,68 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
-    const placeOrderBtn = document.getElementById('placeOrderBtn');
-    const loadingOverlay = document.getElementById('loadingOverlay');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                cookie = cookie.trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
 
-    const csrftoken = getCookie('csrftoken');
+        const csrftoken = getCookie('csrftoken');
 
-    if (placeOrderBtn) {
-        placeOrderBtn.addEventListener('click', placeOrder);
-    }
+        if (placeOrderBtn) {
+            placeOrderBtn.addEventListener('click', placeOrder);
+        }
 
-    async function placeOrder() {
-        loadingOverlay.style.display = 'flex';
+        function placeOrder() {
+            loadingOverlay.style.display = 'flex';
 
-        try {
-            const response = await fetch('/api/place-order/', {
+            // 👉 Start API call in background (no await)
+            fetch('/api/place-order/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken
                 }
-            });
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // store order id for later
+                        localStorage.setItem("order_id", data.order_id);
+                    } else {
+                        alert(data.message || "Something went wrong");
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
-            const data = await response.json();
+            // 👉 Force redirect after 2 sec (NO WAIT)
+            setTimeout(() => {
+                const orderId = localStorage.getItem("order_id");
 
-            if (data.success) {
-                // 🔥 REDIRECT TO PAYMENT PAGE WITH ORDER ID
-                window.location.href = `/payment/${data.order_id}/`;
-            } else {
-                alert(data.message || "Something went wrong");
-            }
-
-        } catch (error) {
-            console.error(error);
-            alert("Error placing order");
-        } finally {
-            loadingOverlay.style.display = 'none';
+                if (orderId) {
+                    window.location.href = `/payment/${orderId}/`;
+                } else {
+                    // fallback if API still not finished
+                    window.location.href = `/payment-loading/`;
+                }
+            }, 1000);
         }
-    }
 
-});
+    });
 </script>
 {% endblock %}

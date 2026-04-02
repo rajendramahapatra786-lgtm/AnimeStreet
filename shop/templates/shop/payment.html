@@ -4,307 +4,307 @@
 {% block content %}
 
 <style>
-.container-box {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    background: #fff;
-}
+    .container-box {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        background: #fff;
+    }
 
-/* Step Indicator */
-.step-indicator {
-    text-align: center;
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
+    /* Step Indicator */
+    .step-indicator {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
 
-.security-badge {
-    text-align: center;
-    color: #4CAF50;
-    font-size: 12px;
-    margin-bottom: 20px;
-}
+    .security-badge {
+        text-align: center;
+        color: #4CAF50;
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
 
-.security-badge span {
-    background: #e8f5e9;
-    padding: 4px 12px;
-    border-radius: 20px;
-}
+    .security-badge span {
+        background: #e8f5e9;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
 
-/* Total Amount Section */
-.total-amount {
-    background: #f5f5f5;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
+    /* Total Amount Section */
+    .total-amount {
+        background: #f5f5f5;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
 
-.total-amount-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+    .total-amount-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-.total-amount-left h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #333;
-}
+    .total-amount-left h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
 
-.amount-value {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-}
+    .amount-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
 
-.dropdown-icon {
-    font-size: 12px;
-    color: #666;
-}
+    .dropdown-icon {
+        font-size: 12px;
+        color: #666;
+    }
 
-/* Cashback Banner */
-.cashback-banner {
-    background: linear-gradient(135deg, #ffd89b 0%, #c7e9fb 100%);
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    /* Cashback Banner */
+    .cashback-banner {
+        background: linear-gradient(135deg, #ffd89b 0%, #c7e9fb 100%);
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.cashback-text {
-    font-weight: bold;
-    color: #333;
-}
+    .cashback-text {
+        font-weight: bold;
+        color: #333;
+    }
 
-.claim-link {
-    color: #2874f0;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .claim-link {
+        color: #2874f0;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+    }
 
-/* Payment Sections */
-.payment-section {
-    margin-bottom: 20px;
-    border: 1px solid #f0f0f0;
-    border-radius: 10px;
-    overflow: hidden;
-}
+    /* Payment Sections */
+    .payment-section {
+        margin-bottom: 20px;
+        border: 1px solid #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-.section-header {
-    padding: 15px;
-    background: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background 0.2s;
-}
+    .section-header {
+        padding: 15px;
+        background: #fff;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s;
+    }
 
-.section-header:hover {
-    background: #fafafa;
-}
+    .section-header:hover {
+        background: #fafafa;
+    }
 
-.section-title {
-    font-weight: bold;
-    font-size: 16px;
-    color: #333;
-}
+    .section-title {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+    }
 
-.section-icon {
-    font-size: 20px;
-}
+    .section-icon {
+        font-size: 20px;
+    }
 
-.section-content {
-    padding: 15px;
-    background: #fafafa;
-    border-top: 1px solid #f0f0f0;
-    display: none;
-}
+    .section-content {
+        padding: 15px;
+        background: #fafafa;
+        border-top: 1px solid #f0f0f0;
+        display: none;
+    }
 
-.section-content.active {
-    display: block;
-}
+    .section-content.active {
+        display: block;
+    }
 
-/* UPI Apps List - Vertical Layout */
-.upi-apps-list {
-    margin-bottom: 20px;
-}
+    /* UPI Apps List - Vertical Layout */
+    .upi-apps-list {
+        margin-bottom: 20px;
+    }
 
-.upi-app-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: #fff;
-}
+    .upi-app-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: #fff;
+    }
 
-.upi-app-item:hover {
-    background: #f5f5f5;
-    border-color: #2874f0;
-}
+    .upi-app-item:hover {
+        background: #f5f5f5;
+        border-color: #2874f0;
+    }
 
-.upi-app-item.active {
-    background: #e8f5e9;
-    border-color: #4CAF50;
-}
+    .upi-app-item.active {
+        background: #e8f5e9;
+        border-color: #4CAF50;
+    }
 
-.upi-app-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+    .upi-app-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-.upi-app-icon {
-    font-size: 28px;
-}
+    .upi-app-icon {
+        font-size: 28px;
+    }
 
-.upi-app-info {
-    display: flex;
-    flex-direction: column;
-}
+    .upi-app-info {
+        display: flex;
+        flex-direction: column;
+    }
 
-.upi-app-name {
-    font-weight: bold;
-    font-size: 16px;
-    color: #333;
-}
+    .upi-app-name {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+    }
 
-.upi-app-desc {
-    font-size: 12px;
-    color: #666;
-}
+    .upi-app-desc {
+        font-size: 12px;
+        color: #666;
+    }
 
-.upi-app-radio {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #ddd;
-    border-radius: 50%;
-    background: #fff;
-}
+    .upi-app-radio {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        background: #fff;
+    }
 
-.upi-app-item.active .upi-app-radio {
-    border-color: #4CAF50;
-    background: #4CAF50;
-    position: relative;
-}
+    .upi-app-item.active .upi-app-radio {
+        border-color: #4CAF50;
+        background: #4CAF50;
+        position: relative;
+    }
 
-.upi-app-item.active .upi-app-radio::after {
-    content: "✓";
-    color: white;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-}
+    .upi-app-item.active .upi-app-radio::after {
+        content: "✓";
+        color: white;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
 
-/* Pay Now Button */
-.btn-submit {
-    width: 100%;
-    padding: 14px;
-    background: #fb641b;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-}
+    /* Pay Now Button */
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #fb641b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
 
-.btn-submit:hover {
-    background: #f85a00;
-}
+    .btn-submit:hover {
+        background: #f85a00;
+    }
 
-/* COD Section */
-.cod-info {
-    background: #fff3e0;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
-}
+    /* COD Section */
+    .cod-info {
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-.btn-cod {
-    width: 100%;
-    padding: 14px;
-    background: #ff9800;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-}
+    .btn-cod {
+        width: 100%;
+        padding: 14px;
+        background: #ff9800;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
 
-.btn-cod:hover {
-    background: #f57c00;
-}
+    .btn-cod:hover {
+        background: #f57c00;
+    }
 
-/* Gift Card Section */
-.gift-card {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px dashed #ddd;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    /* Gift Card Section */
+    .gift-card {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px dashed #ddd;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.gift-card-text {
-    color: #666;
-    font-size: 14px;
-}
+    .gift-card-text {
+        color: #666;
+        font-size: 14px;
+    }
 
-.add-link {
-    color: #2874f0;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .add-link {
+        color: #2874f0;
+        font-weight: bold;
+        cursor: pointer;
+    }
 
-/* Happy Customers */
-.happy-customers {
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #f0f0f0;
-    color: #666;
-    font-size: 12px;
-}
+    /* Happy Customers */
+    .happy-customers {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #f0f0f0;
+        color: #666;
+        font-size: 12px;
+    }
 
-.hidden {
-    display: none;
-}
+    .hidden {
+        display: none;
+    }
 </style>
 
 <div class="container-box">
-    
+
     <!-- Step Indicator -->
     <div class="step-indicator">
         Step 3 of 3 • Payments
     </div>
-    
+
     <div class="security-badge">
         <span>🔒 100% Secure</span>
     </div>
-    
+
     <!-- Total Amount Dropdown -->
     <div class="total-amount" onclick="toggleAmount()">
         <div class="total-amount-left">
@@ -313,13 +313,13 @@
         </div>
         <div class="amount-value">₹{{ order.total_price }}</div>
     </div>
-    
+
     <!-- Cashback Banner -->
     <div class="cashback-banner">
         <span class="cashback-text">🎉 5% Cashback</span>
         <span class="claim-link">Claim now with payment offers →</span>
     </div>
-    
+
     <!-- UPI Section -->
     <div class="payment-section">
         <div class="section-header" onclick="toggleSection('upiContent')">
@@ -327,7 +327,7 @@
             <span class="section-icon">▼</span>
         </div>
         <div id="upiContent" class="section-content active">
-            
+
             <!-- UPI Apps - Vertical List -->
             <div class="upi-apps-list">
                 <div class="upi-app-item" onclick="selectUPIApp(this, 'google')">
@@ -340,7 +340,7 @@
                     </div>
                     <div class="upi-app-radio"></div>
                 </div>
-                
+
                 <div class="upi-app-item" onclick="selectUPIApp(this, 'phonepe')">
                     <div class="upi-app-left">
                         <div class="upi-app-icon">📱</div>
@@ -351,7 +351,7 @@
                     </div>
                     <div class="upi-app-radio"></div>
                 </div>
-                
+
                 <div class="upi-app-item" onclick="selectUPIApp(this, 'amazon')">
                     <div class="upi-app-left">
                         <div class="upi-app-icon">📱</div>
@@ -362,7 +362,7 @@
                     </div>
                     <div class="upi-app-radio"></div>
                 </div>
-                
+
                 <div class="upi-app-item" onclick="selectUPIApp(this, 'paytm')">
                     <div class="upi-app-left">
                         <div class="upi-app-icon">📱</div>
@@ -374,12 +374,12 @@
                     <div class="upi-app-radio"></div>
                 </div>
             </div>
-            
+
             <!-- Pay Now Button -->
             <button class="btn-submit" onclick="showPayNow('UPI')">Pay ₹1,221</button>
         </div>
     </div>
-    
+
     <!-- COD Section -->
     <div class="payment-section">
         <div class="section-header" onclick="toggleSection('codContent')">
@@ -393,28 +393,31 @@
             <button class="btn-cod" onclick="showPayNow('COD')">Confirm COD Order</button>
         </div>
     </div>
-    
+
     <!-- Gift Card Section -->
     <div class="gift-card">
         <div class="gift-card-text">🎁 Have a Flipkart Gift Card?</div>
         <div class="add-link">Add →</div>
     </div>
-    
+
     <!-- Happy Customers -->
     <div class="happy-customers">
         35 Crore happy customers and counting! ❤️
     </div>
-    
+
 </div>
 
 <!-- Payment Modal for QR/Upload -->
-<div id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-    <div style="background: white; max-width: 450px; width: 90%; margin: 20px auto; border-radius: 15px; padding: 25px; max-height: 90vh; overflow-y: auto;">
+<div id="paymentModal"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div
+        style="background: white; max-width: 450px; width: 90%; margin: 20px auto; border-radius: 15px; padding: 25px; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 id="modalTitle" style="margin: 0;">Payment Details</h3>
-            <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
+            <button onclick="closeModal()"
+                style="background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
         </div>
-        
+
         <div id="modalContent">
             <!-- Dynamic content will be loaded here -->
         </div>
@@ -422,121 +425,137 @@
 </div>
 
 <script>
-let selectedUPIApp = null;
+    let selectedUPIApp = null;
 
-function toggleAmount() {
-    // Optional: Expand/collapse amount details
-}
+    function toggleAmount() {
+        // Optional
+    }
 
-function toggleSection(sectionId) {
-    const content = document.getElementById(sectionId);
-    const allContents = document.querySelectorAll('.section-content');
-    
-    // Close other sections
-    allContents.forEach(content => {
-        if (content.id !== sectionId) {
-            content.classList.remove('active');
-        }
-    });
-    
-    // Toggle current section
-    content.classList.toggle('active');
-}
+    function toggleSection(sectionId) {
+        const content = document.getElementById(sectionId);
+        const allContents = document.querySelectorAll('.section-content');
 
-function selectUPIApp(element, app) {
-    // Remove active class from all UPI apps
-    const allApps = document.querySelectorAll('.upi-app-item');
-    allApps.forEach(app => {
-        app.classList.remove('active');
-    });
-    
-    // Add active class to selected app
-    element.classList.add('active');
-    selectedUPIApp = app;
-}
+        allContents.forEach(content => {
+            if (content.id !== sectionId) {
+                content.classList.remove('active');
+            }
+        });
 
-function showPayNow(method) {
-    const modal = document.getElementById('paymentModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalContent = document.getElementById('modalContent');
-    
-    modal.style.display = 'flex';
-    
-    if (method === 'UPI') {
-        if (!selectedUPIApp) {
-            alert('Please select a UPI app first');
-            modal.style.display = 'none';
-            return;
-        }
-        
-        let appName = '';
-        if (selectedUPIApp === 'google') appName = 'Google Pay';
-        else if (selectedUPIApp === 'phonepe') appName = 'PhonePe';
-        else if (selectedUPIApp === 'amazon') appName = 'Amazon Pay';
-        else if (selectedUPIApp === 'paytm') appName = 'Paytm';
-        
-        modalTitle.innerHTML = `UPI Payment - ${appName}`;
-        modalContent.innerHTML = `
+        content.classList.toggle('active');
+    }
+
+    function selectUPIApp(element, app) {
+        const allApps = document.querySelectorAll('.upi-app-item');
+
+        allApps.forEach(app => {
+            app.classList.remove('active');
+        });
+
+        element.classList.add('active');
+        selectedUPIApp = app;
+    }
+
+    function showPayNow(method) {
+        const modal = document.getElementById('paymentModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+
+        modal.style.display = 'flex';
+
+        if (method === 'UPI') {
+            if (!selectedUPIApp) {
+                alert('Please select a UPI app first');
+                modal.style.display = 'none';
+                return;
+            }
+
+            let appName = '';
+            let qrImage = "";
+
+            // 🔥 ONLY THIS PART UPDATED (IMAGE SWITCH)
+            if (selectedUPIApp === 'google') {
+                appName = 'Google Pay';
+                qrImage = "{% static 'shop/images/scaner/gpay.jpeg' %}";
+            }
+            else if (selectedUPIApp === 'phonepe') {
+                appName = 'PhonePe';
+                qrImage = "{% static 'shop/images/scaner/phonepe.jpeg' %}";
+            }
+            else if (selectedUPIApp === 'amazon') {
+                appName = 'Amazon Pay';
+                qrImage = "{% static 'shop/images/scaner/amazon_pay.jpeg' %}";
+            }
+            else if (selectedUPIApp === 'paytm') {
+                appName = 'Paytm';
+                qrImage = "{% static 'shop/images/scaner/paytm.jpeg' %}";
+            }
+
+            modalTitle.innerHTML = `UPI Payment - ${appName}`;
+
+            modalContent.innerHTML = `
             <div style="text-align: center;">
                 <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <img src="{% static 'shop/images/qr.jpeg' %}" style="width: 200px; border-radius: 10px;">
+                    
+                    <img src="${qrImage}" style="width: 200px; border-radius: 10px;">
+                    
                     <h3 style="margin: 10px 0;">Amount: ₹1,221</h3>
+                    
                     <div style="background: #fff; padding: 8px; border-radius: 6px; margin-top: 10px;">
                         <strong>UPI ID:</strong> shop@${selectedUPIApp}
                     </div>
                 </div>
-                
+
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="payment_method" value="UPI">
                     <input type="hidden" name="upi_app" value="${selectedUPIApp}">
                     
                     <div class="form-group" style="margin-bottom: 15px; text-align: left;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #555; font-size: 14px;">📸 Upload Payment Screenshot</label>
-                        <input type="file" name="screenshot" accept="image/*" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                        <label>📸 Upload Payment Screenshot</label>
+                        <input type="file" name="screenshot" required>
                     </div>
-                    
+
                     <div class="form-group" style="margin-bottom: 15px; text-align: left;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #555; font-size: 14px;">🔑 Transaction ID / UTR Number</label>
-                        <input type="text" name="transaction_id" placeholder="Enter transaction ID" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                        <label>🔑 Transaction ID</label>
+                        <input type="text" name="transaction_id" required>
                     </div>
-                    
-                    <button type="submit" class="btn-submit" style="width: 100%; padding: 14px; background: #fb641b; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;"> Submit Payment </button>
+
+                    <button type="submit" class="btn-submit">Submit Payment</button>
                 </form>
             </div>
         `;
-    }
-    else if (method === 'COD') {
-        modalTitle.innerHTML = 'Confirm Order';
-        modalContent.innerHTML = `
+        }
+
+        else if (method === 'COD') {
+            modalTitle.innerHTML = 'Confirm Order';
+
+            modalContent.innerHTML = `
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="payment_method" value="COD">
-                
+
                 <div style="text-align: center; padding: 20px;">
                     <div style="font-size: 48px;">🚚</div>
                     <h3>Cash on Delivery</h3>
-                    <p style="color: #666;">Amount to pay: <strong>₹1,221</strong></p>
-                    <p style="color: #ff9800;">Pay in cash when your order is delivered</p>
+                    <p>Amount: ₹1,221</p>
                 </div>
-                
-                <button type="submit" class="btn-cod" style="width: 100%; padding: 14px; background: #ff9800; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Confirm COD Order</button>
+
+                <button type="submit" class="btn-cod">Confirm COD</button>
             </form>
         `;
+        }
     }
-}
 
-function closeModal() {
-    document.getElementById('paymentModal').style.display = 'none';
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('paymentModal');
-    if (event.target === modal) {
-        modal.style.display = 'none';
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
     }
-}
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('paymentModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
 </script>
 
 {% endblock %}
