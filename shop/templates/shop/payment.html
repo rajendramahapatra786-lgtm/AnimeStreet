@@ -376,7 +376,7 @@
             </div>
 
             <!-- Pay Now Button -->
-            <button class="btn-submit" onclick="showPayNow('UPI')">Pay ₹1,221</button>
+            <button class="btn-submit" onclick="showPayNow('UPI')">Pay ₹{{ order.total_price }}</button>
         </div>
     </div>
 
@@ -388,7 +388,7 @@
         </div>
         <div id="codContent" class="section-content">
             <div class="cod-info">
-                Pay ₹1,221 in cash when your order is delivered
+                Pay ₹{{ order.total_price }} in cash when your order is delivered
             </div>
             <button class="btn-cod" onclick="showPayNow('COD')">Confirm COD Order</button>
         </div>
@@ -426,6 +426,7 @@
 
 <script>
     let selectedUPIApp = null;
+    const totalAmount = "{{ order.total_price }}";
 
     function toggleAmount() {
         // Optional
@@ -498,7 +499,7 @@
                     
                     <img src="${qrImage}" style="width: 200px; border-radius: 10px;">
                     
-                    <h3 style="margin: 10px 0;">Amount: ₹1,221</h3>
+                    <h3 style="margin: 10px 0;">Amount:₹${totalAmount}</h3>
                     
                     <div style="background: #fff; padding: 8px; border-radius: 6px; margin-top: 10px;">
                         <strong>UPI ID:</strong> shop@${selectedUPIApp}
