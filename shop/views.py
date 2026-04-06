@@ -652,3 +652,16 @@ def order_success(request, order_id):
 
 def payment_loading(request):
     return render(request, 'payment_loading.html')
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'shop/my_orders.html', {
+        'orders': orders
+    })
+
+
+@login_required
+def order_detail(request, id):
+    order = Order.objects.get(id=id, user=request.user)
+    return render(request, 'shop/order_detail.html', {'order': order})

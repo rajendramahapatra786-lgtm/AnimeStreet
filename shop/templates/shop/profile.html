@@ -402,6 +402,13 @@
                     <p><strong>Total:</strong> ₹{{ order.total_amount|floatformat:0 }}</p>
                 </div>
                 {% endfor %}
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="{% url 'shop:my_orders' %}" class="checkout-btn">
+                        📦 View All Orders
+                    </a>
+                </div>
+
             </div>
             {% else %}
             <div class="empty-state">

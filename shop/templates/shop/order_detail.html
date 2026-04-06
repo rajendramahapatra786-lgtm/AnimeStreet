@@ -1,0 +1,37 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="container" style="max-width:800px; margin:30px auto;">
+
+    <h2>📦 Order Details</h2>
+
+    <div style="border:1px solid #eee; padding:20px; border-radius:10px;">
+
+        <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+        <p><strong>Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+        <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+
+        <hr>
+
+        {% for item in order.items.all %}
+        <div style="display:flex; margin-bottom:15px;">
+
+            <img src="{{ item.product.image.url }}" width="80">
+
+            <div style="margin-left:15px;">
+                <strong>{{ item.product.name }}</strong><br>
+                Qty: {{ item.quantity }}<br>
+                Price: ₹{{ item.price }}
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <hr>
+
+        <h4>Total: ₹{{ order.total_amount }}</h4>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="max-width:800px; margin:30px auto;">
+
+    <h2 style="margin-bottom:20px;">📦 My Orders</h2>
+
+    {% for order in orders %}
+    {% for item in order.items.all %}
+
+    <a href="{% url 'shop:order_detail' order.id %}" style="text-decoration:none; color:black;">
+
+        <div style="
+                display:flex; 
+                align-items:center; 
+                padding:15px; 
+                border-bottom:1px solid #eee;
+                transition: background 0.2s;
+            " onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">
+
+            <!-- 🖼 PRODUCT IMAGE -->
+            {% if item.product.image %}
+            <img src="{% static item.product.image %}" width="80" height="80"
+                style="object-fit:cover; border-radius:10px;">
+            {% else %}
+            <img src="{% static 'shop/images/products/default.png' %}" width="80" height="80">
+            {% endif %}
+
+            <!-- 📄 PRODUCT INFO -->
+            <div style="flex:1; margin-left:15px;">
+                <div style="font-weight:bold; font-size:16px;">
+                    {{ item.product.name }}
+                </div>
+
+                <div style="color:green; font-size:14px; margin-top:5px;">
+                    {{ order.get_status_display }} on {{ order.created_at|date:"M d, Y" }}
+                </div>
+            </div>
+
+            <!-- ➡ Arrow -->
+            <div style="font-size:22px; color:#999;">›</div>
+
+        </div>
+
+    </a>
+
+    {% endfor %}
+    {% endfor %}
+
+    {% if not orders %}
+    <p style="text-align:center; color:gray;">No orders found</p>
+    {% endif %}
+
+</div>
+{% endblock %}
