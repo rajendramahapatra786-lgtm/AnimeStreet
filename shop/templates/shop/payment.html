@@ -456,6 +456,20 @@
         selectedUPIApp = app;
     }
 
+    function validateUPI() {
+        const upi = document.getElementById("transaction_id").value;
+
+        // Rule: 12–16, letters + numbers
+        const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{12,16}$/;
+
+        if (!pattern.test(upi)) {
+            alert("Invalid Transaction ID! Must be 12-16 characters with letters and numbers.");
+            return false;
+        }
+
+        return true;
+    }
+
     function showPayNow(method) {
         const modal = document.getElementById('paymentModal');
         const modalTitle = document.getElementById('modalTitle');
@@ -506,8 +520,8 @@
                     </div>
                 </div>
 
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
+<form method="POST" enctype="multipart/form-data" onsubmit="return validateUPI()">               
+    {% csrf_token %}
                     <input type="hidden" name="payment_method" value="UPI">
                     <input type="hidden" name="upi_app" value="${selectedUPIApp}">
                     
@@ -518,8 +532,9 @@
 
                     <div class="form-group" style="margin-bottom: 15px; text-align: left;">
                         <label>🔑 Transaction ID</label>
-                        <input type="text" name="transaction_id" required>
-                    </div>
+<input type="text" name="transaction_id" id="transaction_id"
+       maxlength="16" minlength="12" required>     
+             </div>
 
                     <button type="submit" class="btn-submit">Submit Payment</button>
                 </form>
