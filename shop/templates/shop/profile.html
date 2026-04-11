@@ -388,10 +388,10 @@
 
         <!-- Order History Card -->
         <div class="profile-card" style="margin-top: 25px;">
-            <h3><i class="fas fa-history"></i> Order History ({{ orders|length }} orders)</h3>
+            <h3><i class="fas fa-history"></i> Recent Order ({{ orders|length }} orders)</h3>
             {% if orders %}
             <div>
-                {% for order in orders %}
+                {% for order in orders|slice:":4" %}
                 <div class="order-item">
                     <div class="order-header">
                         <span class="order-id">Order #{{ order.order_id|truncatechars:8 }}</span>

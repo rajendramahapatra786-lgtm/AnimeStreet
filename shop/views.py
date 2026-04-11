@@ -206,8 +206,7 @@ def profile(request):
     """User profile page"""
     cart, created = Cart.objects.get_or_create(user=request.user)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    orders = Order.objects.filter(user=request.user)
-    
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')[:4]    
     cart_items = cart.items.select_related('product').all()
     wishlist_items = wishlist.items.select_related('product').all()
     
