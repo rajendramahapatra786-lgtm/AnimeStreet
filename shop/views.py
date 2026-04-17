@@ -446,7 +446,7 @@ def place_order(request):
         return JsonResponse({
             'success': True,
             'message': 'Order placed successfully!',
-            'order_id': order.id
+            'order_id': order.order_id
         })
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
@@ -612,7 +612,7 @@ http://127.0.0.1:8000/shop/admin/reject/{order.id}/
 
 @login_required
 def payment_page(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+    order = get_object_or_404(Order, order_id=order_id)
 
     if request.method == "POST":
         payment_method = request.POST.get('payment_method')
@@ -631,7 +631,7 @@ def payment_page(request, order_id):
             order.save()
 
             # 🔥 UPI → SUCCESS PAGE
-            return redirect('shop:order_success', order_id=order.id)
+            return redirect('shop:order_success', order_id=order.order_id)
 
         # ✅ COD FLOW
         elif payment_method == "COD":
@@ -646,11 +646,11 @@ def payment_page(request, order_id):
 
 @login_required
 def order_success(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+    order = get_object_or_404(Order, order_id=order_id)
     return render(request, 'shop/order_success.html', {'order': order})
 
 def payment_loading(request):
-    return render(request, 'payment_loading.html')
+    return render(request, 'shop/payment_loading.html')
 
 @login_required
 def my_orders(request):
@@ -661,6 +661,6 @@ def my_orders(request):
 
 
 @login_required
-def order_detail(request, id):
-    order = Order.objects.get(id=id, user=request.user)
+def order_detail(request, order_id):
+    order = Order.objects.get(order_id=order_id, user=request.user)
     return render(request, 'shop/order_detail.html', {'order': order})

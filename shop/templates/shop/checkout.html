@@ -243,7 +243,9 @@
         function placeOrder() {
             loadingOverlay.style.display = 'flex';
 
-            // 👉 Start API call in background (no await)
+            let orderId = null;
+
+            // 🔥 Start API in background
             fetch('/api/place-order/', {
                 method: 'POST',
                 headers: {
@@ -251,27 +253,18 @@
                     'X-CSRFToken': csrftoken
                 }
             })
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        // store order id for later
-                        localStorage.setItem("order_id", data.order_id);
-                    } else {
-                        alert(data.message || "Something went wrong");
+                        orderId = data.order_id;
                     }
-                })
-                .catch(error => {
-                    console.error(error);
                 });
 
-            // 👉 Force redirect after 2 sec (NO WAIT)
+            // 🔥 Force animation exactly 1 sec
             setTimeout(() => {
-                const orderId = localStorage.getItem("order_id");
-
                 if (orderId) {
                     window.location.href = `/payment/${orderId}/`;
                 } else {
-                    // fallback if API still not finished
                     window.location.href = `/payment-loading/`;
                 }
             }, 1000);

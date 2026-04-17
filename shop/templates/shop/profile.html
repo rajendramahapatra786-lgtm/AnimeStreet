@@ -394,12 +394,14 @@
                 {% for order in orders|slice:":4" %}
                 <div class="order-item">
                     <div class="order-header">
-                        <span class="order-id">Order #{{ order.order_id|truncatechars:8 }}</span>
+                        <div style="color: black; font-weight: bold;">
+                            📦 {{ order.order_id }}
+                        </div>
                         <span class="order-date">{{ order.created_at|date:"F d, Y" }}</span>
                         <span class="order-status status-{{ order.status }}">{{ order.get_status_display }}</span>
                     </div>
                     <p><strong>Items:</strong> {{ order.items.count }} products</p>
-                   <p><strong>Total:</strong> ₹{{ order.total_price|floatformat:0 }}</p>
+                    <p><strong>Total:</strong> ₹{{ order.total_price|floatformat:0 }}</p>
                 </div>
                 {% endfor %}
 

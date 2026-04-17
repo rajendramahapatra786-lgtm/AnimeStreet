@@ -5,6 +5,7 @@ import uuid
 # from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import random
 
 
 # Create your models here.
@@ -101,30 +102,26 @@ class Order(models.Model):
 
     payment_status = models.CharField(max_length=20, default="Pending")
     status = models.CharField(max_length=20, default="Pending")
+    
+    order_id = models.CharField(max_length=20, unique=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Order {self.id} - {self.user.username}"
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            while True:
+                random_number = random.randint(100000, 999999)
+                new_id = f"ANIME{random_number}"
 
-# class Order(models.Model):
-#     ORDER_STATUS = [
-#         ('pending', 'Pending'),
-#         ('processing', 'Processing'),
-#         ('shipped', 'Shipped'),
-#         ('delivered', 'Delivered'),
-#         ('cancelled', 'Cancelled'),
-#     ]
-    
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-#     order_id = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
-#     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-#     status = models.CharField(max_length=20, choices=ORDER_STATUS, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-    
-    # def __str__(self):
-    #     return f"Order #{self.order_id}"
+                if not Order.objects.filter(order_id=new_id).exists():
+                    self.order_id = new_id
+                    break
+
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{self.order_id} - {self.user.username}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -154,14 +151,3 @@ class Profile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)  
-
-
-# class CartItem(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-#     quantity = models.IntegerField(default=1)
-#     size = models.CharField(max_length=10)
-
-#     def __str__(self):
-#         return self.product.name         
-
