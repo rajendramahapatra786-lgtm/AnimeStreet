@@ -203,8 +203,7 @@
     <div class="order-details">
         <div class="order-detail-row">
             <span class="order-detail-label">Order ID:</span>
-            <span class="order-detail-value" id="orderId">FLIP123456789</span>
-        </div>
+<span class="order-detail-value">{{ order.order_id }}</span>        </div>
         <div class="order-detail-row">
             <span class="order-detail-label">Order Date:</span>
             <span class="order-detail-value" id="orderDate"></span>
@@ -242,7 +241,7 @@ const transactionId = urlParams.get('transaction_id') || localStorage.getItem('t
 const orderAmount = urlParams.get('amount') || localStorage.getItem('orderAmount') || '1221';
 
 // Generate random order ID and tracking ID
-const orderId = 'FLIP' + Math.floor(Math.random() * 1000000000);
+// const orderId = 'FLIP' + Math.floor(Math.random()  1000000000);
 const trackingId = 'TRK' + Math.floor(Math.random() * 1000000000);
 
 // Set order date
@@ -254,7 +253,7 @@ const formattedDate = orderDate.toLocaleDateString('en-IN', {
 });
 
 // Update success page with details
-document.getElementById('orderId').innerText = orderId;
+// document.getElementById('orderId').innerText = orderId;
 document.getElementById('orderDate').innerText = formattedDate;
 document.getElementById('paymentMethod').innerText = paymentMethod === 'COD' ? 'Cash on Delivery' : paymentMethod;
 document.getElementById('transactionId').innerText = transactionId;
@@ -283,7 +282,7 @@ setTimeout(function() {
 }, 6000);
 
 // Store order details for reference
-localStorage.setItem('lastOrderId', orderId);
+localStorage.setItem('lastOrderId', "{{ order.order_id }}");
 localStorage.setItem('lastOrderDate', formattedDate);
 localStorage.setItem('lastOrderAmount', orderAmount);
 </script>
