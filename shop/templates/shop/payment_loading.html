@@ -37,18 +37,25 @@ async function placeOrder() {
         const data = await response.json();
 
         if (data.success) {
+            // ✅ go to payment page
             window.location.href = `/payment/${data.order_id}/`;
         } else {
-            alert("Something went wrong");
+            alert("Order failed");
         }
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR:", error);
+        alert("Something went wrong");
     }
 }
 
-// run immediately
+// 🔥 Run API
 placeOrder();
+
+// 🔥 FORCE redirect after 5 sec (fallback)
+setTimeout(() => {
+    window.location.href = "/profile/"; // or show error page
+}, 5000);
 </script>
 
 {% endblock %}

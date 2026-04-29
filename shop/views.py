@@ -35,6 +35,7 @@ from django.conf import settings
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
 # Create your views here.
 
@@ -206,7 +207,11 @@ def profile(request):
     """User profile page"""
     cart, created = Cart.objects.get_or_create(user=request.user)
     wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')[:4]    
+
+    orders = Order.objects.filter(user=request.user)\
+        .prefetch_related('items')\
+        .order_by('-created_at')[:4]
+
     cart_items = cart.items.select_related('product').all()
     wishlist_items = wishlist.items.select_related('product').all()
     
@@ -410,7 +415,6 @@ def remove_from_wishlist(request):
 @csrf_exempt
 @login_required
 def place_order(request):
-    """API endpoint to place order"""
     if request.method == 'POST':
         cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = cart.items.select_related('product').all()
@@ -421,36 +425,35 @@ def place_order(request):
         subtotal = cart.get_total()
         tax = subtotal * Decimal('0.18')
         total = subtotal + tax
-        
-        # Create order
-        order = Order.objects.create(
-            user=request.user,
-            total_price=total,
-            status='pending'
-        )
-        send_order_email(order)
 
-        # Create order items
-        for item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                size=item.size,
-                quantity=item.quantity,
-                price=item.product.price
+        # ✅ FIXED: inside if block
+        with transaction.atomic():
+
+            order = Order.objects.create(
+                user=request.user,
+                total_price=total,
+                status='pending'
             )
-        
-        # Clear cart
-        cart.items.all().delete()
-        
+            send_order_email(order)
+
+            for item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    size=item.size,
+                    quantity=item.quantity,
+                    price=item.product.price
+                )
+            
+            cart.items.all().delete()
+
         return JsonResponse({
             'success': True,
             'message': 'Order placed successfully!',
             'order_id': order.order_id
         })
-    
-    return JsonResponse({'success': False, 'message': 'Invalid request'})
 
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
 
 # ✅ COUNT API
 def wishlist_count(request):
@@ -660,7 +663,9 @@ def my_orders(request):
     })
 
 
+from django.shortcuts import get_object_or_404
+
 @login_required
 def order_detail(request, order_id):
-    order = Order.objects.get(order_id=order_id, user=request.user)
+    order = get_object_or_404(Order, order_id=order_id, user=request.user)
     return render(request, 'shop/order_detail.html', {'order': order})
