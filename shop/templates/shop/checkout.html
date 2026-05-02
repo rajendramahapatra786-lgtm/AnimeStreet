@@ -242,10 +242,8 @@
 
         function placeOrder() {
             loadingOverlay.style.display = 'flex';
+            placeOrderBtn.disabled = true;
 
-            let orderId = null;
-
-            // 🔥 Start API in background
             fetch('/api/place-order/', {
                 method: 'POST',
                 headers: {
@@ -256,18 +254,20 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        orderId = data.order_id;
+                        setTimeout(() => {
+                            window.location.href = `/payment/${data.order_id}/`;
+                        }, 500);
+                    } else {
+                        alert("Order failed");
+                        loadingOverlay.style.display = 'none';
+                        placeOrderBtn.disabled = false;
                     }
+                })
+                .catch(err => {
+                    console.error(err);
+                    loadingOverlay.style.display = 'none';
+                    placeOrderBtn.disabled = false;
                 });
-
-            // 🔥 Force animation exactly 1 sec
-            setTimeout(() => {
-                if (orderId) {
-                    window.location.href = `/payment/${orderId}/`;
-                } else {
-                    window.location.href = `/payment-loading/`;
-                }
-            }, 1000);
         }
 
     });

@@ -652,8 +652,8 @@ def order_success(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
     return render(request, 'shop/order_success.html', {'order': order})
 
-def payment_loading(request):
-    return render(request, 'shop/payment_loading.html')
+# def payment_loading(request):
+#     return render(request, 'shop/payment_loading.html')
 
 @login_required
 def my_orders(request):

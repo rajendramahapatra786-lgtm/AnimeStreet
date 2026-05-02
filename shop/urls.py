@@ -47,7 +47,7 @@ urlpatterns = [
     path('admin/approve/<int:id>/', views.approve_order, name='approve_order'),
     path('admin/reject/<int:id>/', views.reject_order, name='reject_order'),
 
-    path('payment-loading/', views.payment_loading, name='payment_loading'),
+    # path('payment-loading/', views.payment_loading, name='payment_loading'),
     # path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
     
     path('my-orders/', views.my_orders, name='my_orders'),
