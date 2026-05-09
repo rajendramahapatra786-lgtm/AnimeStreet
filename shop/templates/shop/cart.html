@@ -202,18 +202,29 @@
                 <div class="cart-item-details">
                     <h3>{{ item.product.name }}</h3>
                     <p>Size: {{ item.size }}</p>
-                    <p class="cart-item-price">₹{{ item.product.price|floatformat:0 }}</p>
+
+                    <p class="cart-item-price" data-price="{{ item.product.price }}"
+                        id="item-total-{{ item.product.product_id }}">
+
+                        ₹{{ item.product.price|floatformat:0 }}
+
+                    </p>
+
                 </div>
                 <div class="cart-item-actions">
                     <div class="quantity-control">
-                        <button class="quantity-btn"
-                            onclick="updateQuantity({{ item.product.product_id }}, '{{ item.size }}', {{ item.quantity|add: "
-                            -1" }})">-</button>
+
+                        <button class="quantity-btn" onclick="changeQuantity(this, -1)">
+                            -
+                        </button>
+
                         <input type="number" class="quantity-input" value="{{ item.quantity }}" min="1"
-                            onchange="updateQuantity({{ item.product.product_id }}, '{{ item.size }}', this.value)">
-                        <button class="quantity-btn"
-                            onclick="updateQuantity({{ item.product.product_id }}, '{{ item.size }}', {{ item.quantity|add:"
-                            1" }})">+</button>
+                            data-id="{{ item.product.product_id }}" data-size="{{ item.size }}">
+
+                        <button class="quantity-btn" onclick="changeQuantity(this, 1)">
+                            +
+                        </button>
+
                     </div>
                     <button class="remove-btn"
                         onclick="removeFromCart({{ item.product.product_id }}, '{{ item.size }}')">
@@ -260,6 +271,29 @@
 
 {% block extra_js %}
 <script>
+
+    function changeQuantity(button, change) {
+
+        const container = button.parentElement;
+
+        const input = container.querySelector('.quantity-input');
+
+        let quantity = parseInt(input.value);
+
+        quantity += change;
+
+        // ❌ Prevent negative
+        if (quantity < 1) {
+            quantity = 1;
+        }
+
+        input.value = quantity;
+
+        const productId = input.dataset.id;
+        const size = input.dataset.size;
+
+        updateQuantity(productId, size, quantity);
+    }
     // Update cart item quantity
     async function updateQuantity(productId, size, newQuantity) {
         newQuantity = parseInt(newQuantity);
@@ -282,19 +316,44 @@
             const data = await response.json();
 
             if (data.success) {
-                // Update totals
-                document.getElementById('subtotal').textContent = '₹' + Math.round(data.subtotal);
-                document.getElementById('tax').textContent = '₹' + Math.round(data.tax);
-                document.getElementById('total').textContent = '₹' + Math.round(data.total);
 
-                // Update cart count in navbar
-                const cartBadge = document.getElementById('cartCount');
+                // Update totals
+                document.getElementById('subtotal').textContent =
+                    '₹' + Math.round(data.subtotal);
+
+                document.getElementById('tax').textContent =
+                    '₹' + Math.round(data.tax);
+
+                document.getElementById('total').textContent =
+                    '₹' + Math.round(data.total);
+
+                // Update navbar count
+                const cartBadge =
+                    document.getElementById('cartCount');
+
                 if (cartBadge) {
                     cartBadge.textContent = data.cart_count;
                 }
 
-                // Reload page to refresh cart items
-                location.reload();
+                // 🔥 Update item total price live
+                const itemElement = document.querySelector(
+                    `.cart-item[data-id="${productId}"]`
+                );
+
+                if (itemElement) {
+
+                    const priceElement =
+                        itemElement.querySelector('.cart-item-price');
+
+                    const singlePrice =
+                        parseFloat(priceElement.dataset.price);
+
+                    const newPrice =
+                        singlePrice * newQuantity;
+
+                    priceElement.textContent =
+                        '₹' + Math.round(newPrice);
+                }
             }
         } catch (error) {
             console.error('Error:', error);
