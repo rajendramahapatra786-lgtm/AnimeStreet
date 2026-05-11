@@ -334,8 +334,8 @@
                             <div class="cart-item-size">Size: {{ item.size }}</div>
                         </div>
                         <div class="cart-item-remove"
-                            onclick="removeFromCart({{ item.product.product_id }}, '{{ item.size }}')">
-                            <i class="fas fa-trash"></i>
+                            onclick='removeFromCart("{{ item.product.product_id }}", "{{ item.size }}")' <i
+                            class="fas fa-trash"></i>
                         </div>
                     </div>
                     {% endfor %}
@@ -367,7 +367,8 @@
                             <div class="wishlist-item-name">{{ item.product.name }}</div>
                             <div class="wishlist-item-price">₹{{ item.product.price|floatformat:0 }}</div>
                         </div>
-                        <div class="wishlist-item-remove" onclick="removeFromWishlist({{ item.product.product_id }})">
+                        <div class="wishlist-item-remove" 
+                        onclick='removeFromWishlist("{{ item.product.product_id }}")'>
                             <i class="fas fa-trash"></i>
                         </div>
                     </div>

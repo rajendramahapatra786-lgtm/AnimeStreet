@@ -265,14 +265,15 @@
                 </div>
 
                 <div class="wishlist-item-actions">
-                    <button class="btn-move-cart" onclick="moveToCart({{ item.product.product_id }})">
+                    <button class="btn-move-cart" onclick='moveToCart("{{ item.product.product_id }}")''>
                         <i class="fas fa-shopping-cart"></i> Move to Cart
                     </button>
-                    <button class="btn-remove" onclick="removeFromWishlist({{ item.product.product_id }})">
+                    <button class="btn-remove" onclick='removeFromWishlist("{{ item.product.product_id }}")'>
                         <i class="fas fa-trash"></i> Remove
                     </button>
                 </div>
             </div>
+            
         </div>
         {% endfor %}
         {% else %}
