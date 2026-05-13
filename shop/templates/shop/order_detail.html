@@ -1,6 +1,67 @@
 {% extends 'shop/base.html' %}
 
 {% block content %}
+
+<style>
+
+.tracking-container{
+    margin-top:20px;
+}
+
+.tracking-step{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:22px;
+
+    opacity:0.4;
+
+    transition:0.4s ease;
+}
+
+.tracking-step.active{
+    opacity:1;
+}
+
+.tracking-icon{
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:#ddd;
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:bold;
+}
+
+.tracking-step.active .tracking-icon{
+    background:#4CAF50;
+
+    box-shadow:0 0 15px #4CAF50;
+}
+
+.live-status{
+    margin-top:30px;
+
+    background:#f5f5f5;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+    color:#333;
+}
+
+</style>
+
 <div class="container" style="max-width:800px; margin:30px auto;">
 
     <h2>📦 Order Details</h2>
@@ -10,6 +71,77 @@
         <p><strong>Order ID:</strong> {{ order.order_id }}</p>
         <p><strong>Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
         <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+        <p><strong>Tracking ID:</strong> {{ order.tracking_id }}</p>
+
+        <hr>
+
+<h3 style="margin-top:25px; margin-bottom:20px;">
+    🚚 Delivery Tracking
+</h3>
+
+<div class="tracking-container">
+
+    <div class="tracking-step active">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Order Placed</strong><br>
+            <small>Your order has been placed</small>
+        </div>
+    </div>
+
+    <div class="tracking-step" id="paymentStep">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Payment Confirmed</strong><br>
+            <small>Payment verified successfully</small>
+        </div>
+    </div>
+
+    <div class="tracking-step" id="processingStep">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Preparing Order</strong><br>
+            <small>AnimeStreet is packing your products</small>
+        </div>
+    </div>
+
+    <div class="tracking-step" id="packedStep">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Packed</strong><br>
+            <small>Your order is packed</small>
+        </div>
+    </div>
+
+    <div class="tracking-step" id="shippedStep">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Shipped</strong><br>
+            <small>Your order left warehouse</small>
+        </div>
+    </div>
+
+    <div class="tracking-step" id="deliveryStep">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Out for Delivery</strong><br>
+            <small>Delivery partner is arriving</small>
+        </div>
+    </div>
+
+    <div class="tracking-step" id="deliveredStep">
+        <div class="tracking-icon">✓</div>
+        <div>
+            <strong>Delivered</strong><br>
+            <small>Order delivered successfully</small>
+        </div>
+    </div>
+
+</div>
+
+<div id="liveStatus" class="live-status">
+    📦 Order confirmed
+</div>
 
         <hr>
 
@@ -34,4 +166,74 @@
     </div>
 
 </div>
+
+<script>
+
+function activateStep(stepId, text){
+
+    document.getElementById(stepId).classList.add("active");
+
+    document.getElementById("liveStatus").innerHTML = text;
+}
+
+setTimeout(() => {
+
+    activateStep(
+        "paymentStep",
+        "💳 Payment confirmed successfully"
+    );
+
+}, 1000);
+
+
+setTimeout(() => {
+
+    activateStep(
+        "processingStep",
+        "📦 Preparing your anime products"
+    );
+
+}, 3000);
+
+
+setTimeout(() => {
+
+    activateStep(
+        "packedStep",
+        "🎁 Your order has been packed"
+    );
+
+}, 5000);
+
+
+setTimeout(() => {
+
+    activateStep(
+        "shippedStep",
+        "🚚 Order shipped from AnimeStreet warehouse"
+    );
+
+}, 7000);
+
+
+setTimeout(() => {
+
+    activateStep(
+        "deliveryStep",
+        "🛵 Out for delivery"
+    );
+
+}, 9000);
+
+
+setTimeout(() => {
+
+    activateStep(
+        "deliveredStep",
+        "✅ Delivered successfully"
+    );
+
+}, 11000);
+
+</script>
 {% endblock %}

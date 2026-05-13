@@ -101,21 +101,42 @@ class Order(models.Model):
     payment_screenshot = models.ImageField(upload_to='payments/', blank=True, null=True)
 
     payment_status = models.CharField(max_length=20, default="Pending")
-    status = models.CharField(max_length=20, default="Pending")
-    
+    STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('paid', 'Payment Confirmed'),
+    ('processing', 'Preparing Order'),
+    ('packed', 'Packed'),
+    ('shipped', 'Shipped'),
+    ('out_for_delivery', 'Out for Delivery'),
+    ('delivered', 'Delivered'),
+    ]
+
+    status = models.CharField(
+    max_length=30,
+    choices=STATUS_CHOICES,
+    default='pending'
+)    
     order_id = models.CharField(max_length=20, unique=True, blank=True)
+
+    tracking_id = models.CharField(max_length=100, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if not self.order_id:
-            while True:
-                random_number = random.randint(100000, 999999)
-                new_id = f"ANIME{random_number}"
 
-                if not Order.objects.filter(order_id=new_id).exists():
-                    self.order_id = new_id
-                    break
+        if not self.order_id:
+           while True:
+            random_number = random.randint(100000, 999999)
+
+            new_id = f"ANIME{random_number}"
+
+            if not Order.objects.filter(order_id=new_id).exists():
+                self.order_id = new_id
+                break
+
+    # ✅ Generate tracking ID
+        if not self.tracking_id:
+           self.tracking_id = f"TRK{random.randint(100000000,999999999)}"
 
         super().save(*args, **kwargs)
 
@@ -151,3 +172,4 @@ class Profile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)  
+
