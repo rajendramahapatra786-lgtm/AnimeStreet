@@ -89,13 +89,13 @@
         </div>
     </div>
 
-    <div class="tracking-step" id="paymentStep">
+    <!-- <div class="tracking-step" id="paymentStep">
         <div class="tracking-icon">✓</div>
         <div>
             <strong>Payment Confirmed</strong><br>
             <small>Payment verified successfully</small>
         </div>
-    </div>
+    </div> -->
 
     <div class="tracking-step" id="processingStep">
         <div class="tracking-icon">✓</div>
@@ -176,14 +176,14 @@ function activateStep(stepId, text){
     document.getElementById("liveStatus").innerHTML = text;
 }
 
-setTimeout(() => {
+// setTimeout(() => {
 
-    activateStep(
-        "paymentStep",
-        "💳 Payment confirmed successfully"
-    );
+//     activateStep(
+//         "paymentStep",
+//         "💳 Payment confirmed successfully"
+//     );
 
-}, 1000);
+// }, 1000);
 
 
 setTimeout(() => {
@@ -193,7 +193,7 @@ setTimeout(() => {
         "📦 Preparing your anime products"
     );
 
-}, 3000);
+}, 60000);
 
 
 setTimeout(() => {
@@ -203,7 +203,7 @@ setTimeout(() => {
         "🎁 Your order has been packed"
     );
 
-}, 5000);
+}, 180000);
 
 
 setTimeout(() => {
@@ -213,7 +213,7 @@ setTimeout(() => {
         "🚚 Order shipped from AnimeStreet warehouse"
     );
 
-}, 7000);
+}, 300000); 
 
 
 setTimeout(() => {
@@ -223,7 +223,7 @@ setTimeout(() => {
         "🛵 Out for delivery"
     );
 
-}, 9000);
+}, 480000);
 
 
 setTimeout(() => {
@@ -233,7 +233,7 @@ setTimeout(() => {
         "✅ Delivered successfully"
     );
 
-}, 11000);
+}, 600000);
 
 </script>
 {% endblock %}
