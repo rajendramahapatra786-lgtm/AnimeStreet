@@ -37,6 +37,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 
+from django.utils import timezone
+
 # Create your views here.
 
 def index(request):
@@ -667,5 +669,40 @@ from django.shortcuts import get_object_or_404
 
 @login_required
 def order_detail(request, order_id):
-    order = get_object_or_404(Order, order_id=order_id, user=request.user)
-    return render(request, 'shop/order_detail.html', {'order': order})
+
+    order = get_object_or_404(
+        Order,
+        order_id=order_id,
+        user=request.user
+    )
+
+    # 🔥 AUTO TRACKING SYSTEM
+    minutes_passed = (
+        timezone.now() - order.created_at
+    ).total_seconds() / 60
+
+    if minutes_passed >= 10:
+        order.status = "delivered"
+
+    elif minutes_passed >= 8:
+        order.status = "out_for_delivery"
+
+    elif minutes_passed >= 5:
+        order.status = "shipped"
+
+    elif minutes_passed >= 3:
+        order.status = "packed"
+
+    elif minutes_passed >= 1:
+        order.status = "processing"
+
+    else:
+        order.status = "pending"
+
+    order.save()
+
+    return render(
+        request,
+        'shop/order_detail.html',
+        {'order': order}
+    )
