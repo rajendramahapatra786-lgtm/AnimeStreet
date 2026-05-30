@@ -1,5 +1,5 @@
 {% extends 'shop/base.html' %}
-
+{% load static %}
 {% block content %}
 
 <style>
@@ -170,7 +170,7 @@
         {% for item in order.items.all %}
         <div style="display:flex; margin-bottom:15px;">
 
-            <img src="{{ item.product.image.url }}" width="80">
+            <img src="{% static item.product.image %}" width="80">
 
             <div style="margin-left:15px;">
                 <strong>{{ item.product.name }}</strong><br>
