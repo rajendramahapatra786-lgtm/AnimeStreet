@@ -50,5 +50,6 @@ urlpatterns = [
     # path('payment-loading/', views.payment_loading, name='payment_loading'),
     # path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
     
+    path('invoice/<int:order_id>/',views.download_invoice,name='download_invoice'),
     path('my-orders/', views.my_orders, name='my_orders'),
     path('order/<str:order_id>/', views.order_detail, name='order_detail'),]

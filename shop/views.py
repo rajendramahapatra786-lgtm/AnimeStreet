@@ -39,6 +39,11 @@ from django.db import transaction
 
 from django.utils import timezone
 
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from .models import Order
+
+
 # Create your views here.
 
 def index(request):
@@ -706,3 +711,45 @@ def order_detail(request, order_id):
         'shop/order_detail.html',
         {'order': order}
     )
+
+
+
+def download_invoice(request, order_id):
+
+    order = Order.objects.get(id=order_id)
+
+    response = HttpResponse(content_type='application/pdf')
+
+    response['Content-Disposition'] = (
+        f'attachment; filename="Invoice_{order.order_id}.pdf"'
+    )
+
+    p = canvas.Canvas(response)
+
+    p.setFont("Helvetica-Bold", 18)
+    p.drawString(50, 800, "AnimeStreet Invoice")
+
+    p.setFont("Helvetica", 12)
+
+    p.drawString(50, 760, f"Order ID: {order.order_id}")
+    p.drawString(50, 740, f"Tracking ID: {order.tracking_id}")
+    p.drawString(50, 720, f"Status: {order.get_status_display()}")
+    p.drawString(50, 700, f"Total: ₹{order.total_price}")
+
+    y = 650
+
+    p.drawString(50, y, "Products:")
+
+    y -= 30
+
+    for item in order.items.all():
+        p.drawString(
+            50,
+            y,
+            f"{item.product.name} x {item.quantity} - ₹{item.price}"
+        )
+        y -= 20
+
+    p.save()
+
+    return response
