@@ -40,7 +40,17 @@ from django.db import transaction
 from django.utils import timezone
 
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Table,
+    TableStyle,
+    Paragraph,
+    Spacer,
+)
+
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from django.http import HttpResponse
 from .models import Order
 
 
@@ -711,9 +721,9 @@ def order_detail(request, order_id):
         'shop/order_detail.html',
         {'order': order}
     )
+# ============= download_invoice ================
 
-
-
+@login_required
 def download_invoice(request, order_id):
 
     order = Order.objects.get(id=order_id)
@@ -724,32 +734,269 @@ def download_invoice(request, order_id):
         f'attachment; filename="Invoice_{order.order_id}.pdf"'
     )
 
-    p = canvas.Canvas(response)
+    doc = SimpleDocTemplate(
+        response,
+        leftMargin=35,
+        rightMargin=35,
+        topMargin=30,
+        bottomMargin=30
+    )
 
-    p.setFont("Helvetica-Bold", 18)
-    p.drawString(50, 800, "AnimeStreet Invoice")
+    styles = getSampleStyleSheet()
+    elements = []
 
-    p.setFont("Helvetica", 12)
+    # =====================================
+# HEADER FIXED
+# =====================================
 
-    p.drawString(50, 760, f"Order ID: {order.order_id}")
-    p.drawString(50, 740, f"Tracking ID: {order.tracking_id}")
-    p.drawString(50, 720, f"Status: {order.get_status_display()}")
-    p.drawString(50, 700, f"Total: ₹{order.total_price}")
+    header_data = [
+        ["ANIMESTREET"],
+        ["Premium Anime Merchandise Store"]
+    ]
 
-    y = 650
+    header = Table(
+        header_data,
+        colWidths=[500],
+        rowHeights=[28, 22]
+    )
 
-    p.drawString(50, y, "Products:")
+    header.setStyle(TableStyle([
 
-    y -= 30
+        # pink background whole header
+        ('BACKGROUND', (0, 0), (-1, -1),
+         colors.HexColor("#ff4d6d")),
+
+        # white text
+        ('TEXTCOLOR', (0, 0), (-1, -1),
+         colors.white),
+
+        # center text
+        ('ALIGN', (0, 0), (-1, -1),
+         'CENTER'),
+
+        # fonts
+        ('FONTNAME', (0, 0), (0, 0),
+         'Helvetica-Bold'),
+
+        ('FONTNAME', (0, 1), (0, 1),
+         'Helvetica'),
+
+        # font sizes
+        ('FONTSIZE', (0, 0), (0, 0),
+         20),
+
+        ('FONTSIZE', (0, 1), (0, 1),
+         10),
+
+        # spacing
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6)
+
+         ]))
+
+    elements.append(header)
+
+    elements.append(Spacer(1, 18))
+
+    # =====================================
+    # INVOICE DETAILS
+    # =====================================
+
+    invoice_data = [
+        ["Invoice No", f"INV-{order.id}"],
+        ["Order ID", order.order_id],
+        ["Tracking ID", order.tracking_id],
+        ["Status", order.status.upper()],
+        ["Payment Method", order.payment_method],
+    ]
+
+    invoice_table = Table(invoice_data, colWidths=[150, 320])
+
+    invoice_table.setStyle(TableStyle([
+
+        ('GRID', (0, 0), (-1, -1),
+         0.5, colors.grey),
+
+        ('BACKGROUND', (0, 0), (0, -1),
+         colors.HexColor("#fff5f7")),
+
+        ('PADDING', (0, 0), (-1, -1), 8)
+
+    ]))
+
+    elements.append(
+        Paragraph("<b>INVOICE DETAILS</b>", styles["Heading3"])
+    )
+
+    elements.append(invoice_table)
+    elements.append(Spacer(1, 20))
+
+    # =====================================
+    # BILL TO
+    # =====================================
+
+    profile = request.user.profile
+
+    customer_data = [
+
+        ["Name", request.user.username],
+
+        ["Address", profile.address],
+
+        ["City", profile.city],
+
+        ["State", profile.state],
+
+        ["Pincode", profile.pincode]
+
+    ]
+
+    customer_table = Table(
+        customer_data,
+        colWidths=[150, 320]
+    )
+
+    customer_table.setStyle(TableStyle([
+
+        ('GRID', (0, 0), (-1, -1),
+         0.5, colors.grey),
+
+        ('BACKGROUND', (0, 0), (0, -1),
+         colors.HexColor("#fff5f7")),
+
+        ('PADDING', (0, 0), (-1, -1), 8)
+
+    ]))
+
+    elements.append(
+        Paragraph("<b>BILL TO</b>", styles["Heading3"])
+    )
+
+    elements.append(customer_table)
+    elements.append(Spacer(1, 20))
+
+    # =====================================
+    # PRODUCTS ORDERED
+    # =====================================
+
+    product_data = [
+        ["PRODUCT", "QTY", "PRICE", "TOTAL"]
+    ]
+
+    subtotal = Decimal('0.00')
 
     for item in order.items.all():
-        p.drawString(
-            50,
-            y,
-            f"{item.product.name} x {item.quantity} - ₹{item.price}"
-        )
-        y -= 20
 
-    p.save()
+        total = item.price * item.quantity
+
+        subtotal += total
+
+        product_data.append([
+
+            item.product.name,
+
+            str(item.quantity),
+
+            f"Rs . {item.price}",
+
+            f"Rs . {total}"
+
+        ])
+
+    product_table = Table(
+        product_data,
+        colWidths=[250, 60, 80, 90]
+    )
+
+    product_table.setStyle(TableStyle([
+
+        ('BACKGROUND', (0, 0), (-1, 0),
+         colors.HexColor("#ff4d6d")),
+
+        ('TEXTCOLOR', (0, 0), (-1, 0),
+         colors.white),
+
+        ('FONTNAME', (0, 0), (-1, 0),
+         'Helvetica-Bold'),
+
+        ('GRID', (0, 0), (-1, -1),
+         0.5, colors.grey),
+
+        ('PADDING', (0, 0), (-1, -1), 8)
+
+    ]))
+
+    elements.append(
+        Paragraph("<b>PRODUCTS ORDERED</b>", styles["Heading3"])
+    )
+
+    elements.append(product_table)
+    elements.append(Spacer(1, 20))
+
+    # =====================================
+    # PAYMENT SUMMARY
+    # =====================================
+
+    tax = subtotal * Decimal('0.18')
+
+    grand_total = subtotal + tax
+
+    summary_data = [
+
+        ["Subtotal", f"Rs . {subtotal}"],
+
+        ["GST (18%)", f"Rs . {round(tax, 2)}"],
+
+        ["Shipping", "FREE"],
+
+        ["TOTAL", f"Rs . {round(grand_total, 2)}"]
+
+    ]
+
+    summary_table = Table(
+        summary_data,
+        colWidths=[200, 150]
+    )
+
+    summary_table.setStyle(TableStyle([
+
+        ('GRID', (0, 0), (-1, -1),
+         0.5, colors.grey),
+
+        ('BACKGROUND', (0, 3), (-1, 3),
+         colors.HexColor("#ffe6ec")),
+
+        ('FONTNAME', (0, 3), (-1, 3),
+         'Helvetica-Bold'),
+
+        ('PADDING', (0, 0), (-1, -1), 8)
+
+    ]))
+
+    elements.append(
+        Paragraph("<b>PAYMENT SUMMARY</b>", styles["Heading3"])
+    )
+
+    elements.append(summary_table)
+
+    elements.append(Spacer(1, 25))
+
+    # =====================================
+    # FOOTER
+    # =====================================
+
+    footer = Paragraph(
+        "<para align=center>"
+        "<font size=11 color='#ff4d6d'>"
+        "<b>Thank you for shopping with AnimeStreet</b>"
+        "</font><br/><br/>"
+        "Wear Your Favorite Universe"
+        "</para>",
+        styles["Normal"]
+    )
+
+    elements.append(footer)
+
+    doc.build(elements)
 
     return response
