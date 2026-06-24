@@ -127,7 +127,7 @@
         padding: 0;
     }
 
-    .form-group input {
+    input[type="password"] {
         padding-right: 40px;
     }
 
@@ -188,7 +188,7 @@
             <div class="password-requirements">
                 <small>Password must contain:</small>
                 <ul>
-                    <li>At least 8 characters</li>
+                    <li>8 to 20 characters only</li>
                     <li>Cannot be too similar to your personal info</li>
                     <li>Cannot be a common password</li>
                     <li>Cannot be entirely numeric</li>
@@ -219,5 +219,14 @@
             icon.classList.replace("fa-eye-slash", "fa-eye");
         }
     }
+
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     let passwordFields = document.querySelectorAll("input[type='password']");
+
+    //     passwordFields.forEach(field => {
+    //         field.setAttribute("maxlength", "20");
+    //         field.setAttribute("minlength", "8");
+    //     });
+    // });
 </script>
 {% endblock %}

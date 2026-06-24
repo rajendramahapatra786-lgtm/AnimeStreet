@@ -38,6 +38,7 @@
         border-radius: 8px;
         font-size: 1rem;
         transition: all 0.3s ease;
+        box-sizing: border-box;
     }
 
     .form-group input:focus {
@@ -101,6 +102,47 @@
         color: #856404;
         border: 1px solid #ffeeba;
     }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-wrapper input {
+        padding: 12px 55px 12px 12px !important;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #777;
+        z-index: 10;
+        width: 20px;
+        height: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .password-toggle i {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    /* Disable Edge / browser default password reveal button */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear {
+        display: none;
+    }
+
+    /* Chrome / Edge autofill weird rendering fix */
+    input {
+        appearance: none !important;
+        -webkit-appearance: none !important;
+    }
 </style>
 {% endblock %}
 
@@ -125,16 +167,19 @@
                 <input type="text" id="username" name="username" required placeholder="Enter your username">
             </div>
 
-            <div class="form-group" style="position: relative;">
+            <div class="form-group">
                 <label for="password">Password</label>
 
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <div class="password-wrapper">
 
-                <!-- Eye Icon -->
-                <span onclick="togglePassword()"
-                    style="position: absolute; right: 12px; top: 42px; cursor: pointer; color: #777;">
-                    <i id="eyeIcon" class="fas fa-eye"></i>
-                </span>
+                    <input type="password" id="password" name="password" required minlength="8" maxlength="20"
+                        placeholder="Enter your password">
+
+                    <span class="password-toggle" onclick="togglePassword()">
+                        <i id="eyeIcon" class="fas fa-eye"></i>
+                    </span>
+
+                </div>
             </div>
 
             <button type="submit" class="auth-btn">
@@ -150,19 +195,17 @@
 </div>
 
 <script>
-function togglePassword() {
-    let password = document.getElementById("password");
-    let eyeIcon = document.getElementById("eyeIcon");
+    function togglePassword() {
+        let password = document.getElementById("password");
+        let eyeIcon = document.getElementById("eyeIcon");
 
-    if (password.type === "password") {
-        password.type = "text";
-        eyeIcon.classList.remove("fa-eye");
-        eyeIcon.classList.add("fa-eye-slash");
-    } else {
-        password.type = "password";
-        eyeIcon.classList.remove("fa-eye-slash");
-        eyeIcon.classList.add("fa-eye");
+        if (password.type === "password") {
+            password.type = "text";
+            eyeIcon.className = "fas fa-eye-slash";
+        } else {
+            password.type = "password";
+            eyeIcon.className = "fas fa-eye";
+        }
     }
-}
 </script>
 {% endblock %}

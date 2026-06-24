@@ -96,14 +96,6 @@ def watches(request):
 
 # ==================== AUTHENTICATION VIEWS ====================
 
-
-# def get_cart_ids(request):
-#     if request.user.is_authenticated:
-#         items = Cart.objects.filter(user=request.user).values_list('product_id', flat=True)
-#         return JsonResponse({'ids': list(items)})
-#     return JsonResponse({'ids': []})
-
-
 def login_view(request):
     """User login page"""
     if request.user.is_authenticated:

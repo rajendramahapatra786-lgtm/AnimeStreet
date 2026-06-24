@@ -12,8 +12,22 @@ class SignupForm(UserCreationForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+        # Password restrictions
+        self.fields['password1'].widget.attrs.update({
+            'maxlength': 20,
+            'minlength': 8
+        })
+
+        self.fields['password2'].widget.attrs.update({
+            'maxlength': 20,
+            'minlength': 8
+        })
     
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -22,3 +36,21 @@ class SignupForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+    def clean_password1(self):
+        password = self.cleaned_data.get("password1")
+
+        if not password:
+            return password
+
+        if len(password) > 20:
+            raise forms.ValidationError(
+                "Password cannot be more than 20 characters."
+            )
+
+        if len(password) < 8:
+            raise forms.ValidationError(
+                "Password must be at least 8 characters."
+            )
+
+        return password
