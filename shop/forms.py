@@ -27,7 +27,7 @@ class SignupForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({
             'maxlength': 20,
             'minlength': 8
-        })
+        })   
     
     def save(self, commit=True):
         user = super().save(commit=False)

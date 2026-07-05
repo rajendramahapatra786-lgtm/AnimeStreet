@@ -38,7 +38,10 @@ urlpatterns = [
     path('api/wishlist-ids/', views.wishlist_ids),
     path('api/cart-ids/', views.cart_ids),
 
+    # Forgot password system
     path('verify-otp/', views.verify_signup_otp, name='verify_signup_otp'),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('reset-password/', views.reset_password, name='reset_password'),
 
     path('edit-profile/', views.edit_profile, name='edit_profile'),
 

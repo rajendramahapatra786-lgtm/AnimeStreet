@@ -129,6 +129,7 @@ def signup_view(request):
             # Store in session
             request.session['signup_data'] = form.cleaned_data
             request.session['otp'] = otp
+            request.session['otp_type'] = "signup"
 
             email = form.cleaned_data.get('email')
 
@@ -179,31 +180,60 @@ This code is valid for 5 minutes.
 
 
 def verify_signup_otp(request):
+
     if request.method == "POST":
-        user_otp = request.POST.get('otp')
 
-        if str(user_otp) == str(request.session.get('otp')):
+        user_otp = request.POST.get("otp")
 
-            data = request.session.get('signup_data')
+        if str(user_otp) == str(request.session.get("otp")):
 
-            user = User.objects.create_user(
-                username=data['username'],
-                email=data['email'],
-                password=data['password1']
-            )
+            otp_type = request.session.get("otp_type")
 
-            messages.success(request, "Account created successfully 🎉")
 
-            # Clear session
-            request.session.pop('otp', None)
-            request.session.pop('signup_data', None)
+            # SIGNUP FLOW
+            if otp_type == "signup":
 
-            return redirect('shop:login')
+                data = request.session.get("signup_data")
+
+                user = User.objects.create_user(
+                    username=data["username"],
+                    email=data["email"],
+                    password=data["password1"]
+                )
+
+                messages.success(
+                    request,
+                    "Account created successfully 🎉"
+                )
+
+                request.session.pop("otp",None)
+                request.session.pop("signup_data",None)
+                request.session.pop("otp_type", None)
+
+                return redirect("shop:login")
+
+
+            # RESET PASSWORD FLOW
+            elif otp_type == "reset_password":
+
+                request.session["otp_verified"] = True
+
+                request.session.pop("otp", None)
+                request.session.pop("otp_type", None)
+
+                return redirect("shop:reset_password")
 
         else:
-            messages.error(request, "Invalid OTP ❌")
 
-    return render(request, 'shop/verify_otp.html')
+            messages.error(
+                request,
+                "Invalid OTP"
+            )
+
+    return render(
+        request,
+        "shop/verify_otp.html"
+    )
 
 def logout_view(request):
     """User logout"""
@@ -992,3 +1022,107 @@ def download_invoice(request, order_id):
     doc.build(elements)
 
     return response
+
+
+
+def forgot_password(request):
+
+    if request.method == "POST":
+
+        email = request.POST.get("email")
+        request.session.pop("otp_verified", None)
+
+        try:
+
+            user = User.objects.filter(email=email).first()
+            otp = random.randint(1000,9999)
+
+            request.session["otp"] = otp
+            request.session["otp_type"] = "reset_password"
+            request.session["reset_email"] = email
+
+            send_mail(
+                "AnimeStreet Password Reset",
+                f"Your OTP is {otp}",
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False
+            )
+
+            return redirect("shop:verify_signup_otp")
+
+        except User.DoesNotExist:
+
+            messages.error(
+                request,
+                "Email not registered"
+            )
+
+    return render(
+        request,
+        "shop/forgot_password.html"
+    )
+
+
+def reset_password(request):
+
+    # SECURITY CHECK
+    if not request.session.get("otp_verified"):
+        return redirect("shop:login")
+
+    if request.method == "POST":
+
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+
+
+        if len(password1) < 8 or len(password1) > 20:
+
+            messages.error(
+               request,
+               "Password must be 8 to 20 characters"
+            )
+
+            return redirect("shop:reset_password")
+
+        if password1 != password2:
+
+            messages.error(
+                request,
+                "Passwords do not match"
+            )
+
+            return redirect(
+                "shop:reset_password"
+            )
+
+
+        email = request.session.get(
+            "reset_email"
+        )
+
+        user = User.objects.get(
+            email=email
+        )
+
+        user.set_password(
+            password1
+        )
+
+        user.save()
+
+        request.session.flush()
+
+        messages.success(
+            request,
+            "Password updated successfully"
+        )
+
+        return redirect(
+            "shop:login"
+        )
+
+    return render(
+        request,
+        "shop/reset_password.html"
+    )
