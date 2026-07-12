@@ -1126,3 +1126,7 @@ def reset_password(request):
         request,
         "shop/reset_password.html"
     )
+
+
+def reset_password(request):
+    return render(request, "shop/reset_password.html")
