@@ -553,54 +553,6 @@ def edit_profile(request):
         return redirect("shop:profile")
     return render(request, "shop/edit_profile.html", {"profile": profile})
 
-# def checkout(request):
-#     profile = request.user.profile
-
-#     if not profile.address or not profile.pincode:
-#         return redirect("edit_profile")
-
-#     return render(request, "shop/checkout.html", {"profile": profile})
-
-# def add_to_cart(request):
-#     data = json.loads(request.body)
-
-#     product_id = data.get('product_id')
-#     size = data.get('size')
-
-#     cart, created = Cart.objects.get_or_create(user=request.user)
-
-#     item, created = CartItem.objects.get_or_create(
-#         cart=cart,
-#         product_id=product_id,
-#         size=size
-#     )
-
-#     if not created:
-#         item.quantity += 1
-#         item.save()
-
-#     return JsonResponse({'success': True})
-
-# def cart(request):
-#     cart, created = Cart.objects.get_or_create(user=request.user)
-
-#     cart_items = cart.items.all()
-
-#     return render(request, 'shop/cart.html', {
-#         'cart_items': cart_items
-#     })
-
-# def checkout(request):
-#     cart, created = Cart.objects.get_or_create(user=request.user)
-#     cart_items = cart.items.all()
-
-#     if not cart_items:
-#         return redirect('shop:cart')
-
-#     return render(request, 'shop/checkout.html', {
-#         'cart_items': cart_items
-#     })
-
 
 @staff_member_required
 def admin_orders(request):
@@ -1032,31 +984,27 @@ def forgot_password(request):
         email = request.POST.get("email")
         request.session.pop("otp_verified", None)
 
-        try:
+        user = User.objects.filter(email=email).first()
 
-            user = User.objects.filter(email=email).first()
-            otp = random.randint(1000,9999)
+        if not user:
+            messages.error(request, "Email not registered")
+            return redirect("shop:forgot_password")
 
-            request.session["otp"] = otp
-            request.session["otp_type"] = "reset_password"
-            request.session["reset_email"] = email
+        otp = random.randint(1000, 9999)
 
-            send_mail(
-                "AnimeStreet Password Reset",
-                f"Your OTP is {otp}",
-                settings.EMAIL_HOST_USER,
-                [email],
-                fail_silently=False
-            )
+        request.session["otp"] = otp
+        request.session["otp_type"] = "reset_password"
+        request.session["reset_email"] = email
 
-            return redirect("shop:verify_signup_otp")
+        send_mail(
+            "AnimeStreet Password Reset",
+            f"Your OTP is {otp}",
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=False
+        )
 
-        except User.DoesNotExist:
-
-            messages.error(
-                request,
-                "Email not registered"
-            )
+        return redirect("shop:verify_signup_otp")
 
     return render(
         request,
@@ -1128,5 +1076,5 @@ def reset_password(request):
     )
 
 
-def reset_password(request):
-    return render(request, "shop/reset_password.html")
+# def reset_password(request):
+#     return render(request, "shop/reset_password.html")
