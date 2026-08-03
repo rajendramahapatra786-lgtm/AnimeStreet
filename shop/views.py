@@ -1075,6 +1075,7 @@ def reset_password(request):
         "shop/reset_password.html"
     )
 
+# it was for chanking reset page passowrd only uprer reset password comeent then do it
 
 # def reset_password(request):
 #     return render(request, "shop/reset_password.html")
