@@ -1,8 +1,14 @@
 {% load static %}
+
 <nav class="navbar">
     <div class="container">
 
-        <!-- LEFT -->
+        <!-- MOBILE MENU BUTTON -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- LOGO -->
         <div class="navbar-brand">
             <a href="{% url 'shop:index' %}">
                 <i class="fas fa-dragon"></i>
@@ -10,45 +16,66 @@
             </a>
         </div>
 
-        <!-- CENTER (SEARCH ONLY) -->
+        <!-- SEARCH -->
         <div class="navbar-center">
             <div class="search-box">
-                <input type="text" id="globalSearchInput" placeholder="Search products...">
-                <button id="globalSearchBtn">
+                <input
+                    type="text"
+                    id="globalSearchInput"
+                    placeholder="Search products..."
+                >
+                <button id="globalSearchBtn" aria-label="Search">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
         </div>
 
-        <!-- RIGHT -->
-        <div class="navbar-right">
+        <!-- NAVIGATION + ACTIONS -->
+        <div class="navbar-right" id="navbarRight">
 
-            <!-- MENU -->
-            <a href="{% url 'shop:index' %}" class="nav-link">Home</a>
-            <a href="{% url 'shop:fashion' %}" class="nav-link">Fashion</a>
-            <a href="{% url 'shop:watches' %}" class="nav-link">Watches</a>
-            <a href="{% url 'shop:bags' %}" class="nav-link">Bags</a>
+            <!-- MENU LINKS -->
+            <div class="navbar-links">
+                <a href="{% url 'shop:index' %}" class="nav-link">
+                    Home
+                </a>
 
-            <!-- ICONS -->
-            <a href="{% url 'shop:wishlist' %}" class="action-icon">
-                <i class="fas fa-heart"></i>
-                <span id="wishlistCount" class="badge">0</span>
-            </a>
+                <a href="{% url 'shop:fashion' %}" class="nav-link">
+                    Fashion
+                </a>
 
-            <a href="{% url 'shop:cart' %}" class="action-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cartCount" class="badge">0</span>
-            </a>
+                <a href="{% url 'shop:watches' %}" class="nav-link">
+                    Watches
+                </a>
 
-            {% if user.is_authenticated %}
-            <a href="{% url 'shop:profile' %}" class="action-icon">
-                <i class="fas fa-user"></i>
-            </a>
-            {% else %}
-            <a href="{% url 'shop:login' %}" class="action-icon">
-                <i class="fas fa-user"></i>
-            </a>
-            {% endif %}
+                <a href="{% url 'shop:bags' %}" class="nav-link">
+                    Bags
+                </a>
+            </div>
+
+            <!-- ACTION ICONS -->
+            <div class="navbar-actions">
+
+                <a href="{% url 'shop:wishlist' %}" class="action-icon" aria-label="Wishlist">
+                    <i class="fas fa-heart"></i>
+                    <span id="wishlistCount" class="badge">0</span>
+                </a>
+
+                <a href="{% url 'shop:cart' %}" class="action-icon" aria-label="Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartCount" class="badge">0</span>
+                </a>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'shop:profile' %}" class="action-icon" aria-label="Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+                {% else %}
+                <a href="{% url 'shop:login' %}" class="action-icon" aria-label="Login">
+                    <i class="fas fa-user"></i>
+                </a>
+                {% endif %}
+
+            </div>
 
         </div>
 
@@ -56,45 +83,101 @@
 </nav>
 
 <script>
-    // Highlight current page in navbar
-    document.addEventListener('DOMContentLoaded', function () {
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.nav-link');
+document.addEventListener('DOMContentLoaded', function () {
 
-        navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href === currentPath || (currentPath === '/' && href === '/')) {
-                link.classList.add('active');
+    /* =========================
+       ACTIVE NAV LINK
+    ========================= */
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+
+        if (href === currentPath) {
+            link.classList.add('active');
+        }
+    });
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+    const searchInput = document.getElementById('globalSearchInput');
+    const searchBtn = document.getElementById('globalSearchBtn');
+
+    if (searchInput && searchBtn) {
+
+        const performSearch = () => {
+            const query = searchInput.value.trim();
+
+            if (query) {
+                sessionStorage.setItem('searchQuery', query);
+                window.location.href = '/';
+            }
+        };
+
+        searchBtn.addEventListener('click', performSearch);
+
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    }
+
+
+    /* =========================
+       MOBILE MENU
+    ========================= */
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const navbarRight = document.getElementById('navbarRight');
+
+    if (menuToggle && navbarRight) {
+
+        menuToggle.addEventListener('click', function () {
+
+            navbarRight.classList.toggle('mobile-open');
+
+            const icon = menuToggle.querySelector('i');
+
+            if (navbarRight.classList.contains('mobile-open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
             }
         });
 
-        // Setup search functionality
-        const searchInput = document.getElementById('globalSearchInput');
-        const searchBtn = document.getElementById('globalSearchBtn');
 
-        if (searchInput && searchBtn) {
-            const performSearch = () => {
-                const query = searchInput.value.trim();
-                if (query) {
-                    sessionStorage.setItem('searchQuery', query);
-                    window.location.href = '/';
-                }
-            };
+        /* Close menu after selecting a page */
+        document.querySelectorAll('.nav-link').forEach(link => {
 
-            searchBtn.addEventListener('click', performSearch);
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
+            link.addEventListener('click', function () {
+
+                navbarRight.classList.remove('mobile-open');
+
+                const icon = menuToggle.querySelector('i');
+
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
             });
-        }
 
-        // Update cart and wishlist counts
-        if (typeof updateCartCount === 'function') {
-            updateCartCount();
-        }
-        if (typeof updateWishlistCount === 'function') {
-            updateWishlistCount();
-        }
-    });
+        });
+    }
+
+
+    /* =========================
+       CART / WISHLIST COUNTS
+    ========================= */
+    if (typeof updateCartCount === 'function') {
+        updateCartCount();
+    }
+
+    if (typeof updateWishlistCount === 'function') {
+        updateWishlistCount();
+    }
+
+});
 </script>

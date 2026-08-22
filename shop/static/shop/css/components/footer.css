@@ -1,99 +1,473 @@
-/* ===== FOOTER ===== */
+/* =========================================================
+   ANIMESTREET FOOTER
+   FULL RESPONSIVE
+   ========================================================= */
+
 .footer {
-    background: #151E26; 
+    width: 100%;
+    background: #151E26;
     color: #cbd5e1;
     padding: 48px 0 24px;
+    box-sizing: border-box;
 }
 
-/* GRID */
+
+/* =========================================================
+   FOOTER GRID
+   ========================================================= */
+
 .footer-grid {
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 40px;
 }
 
-/* SECTION */
+
+/* =========================================================
+   FOOTER SECTION
+   ========================================================= */
+
+.footer-section {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
 .footer-section h3 {
     color: #ffffff;
     font-size: 20px;
-    margin-bottom: 15px;
+    margin: 0 0 15px;
 }
 
 .footer-section h4 {
     color: #ffffff;
-    margin-bottom: 15px;
+    margin: 0 0 15px;
 }
 
-/* TEXT */
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
 .footer-section p {
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin: 0 0 15px;
 }
 
-/* LINKS */
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
 .footer-section ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .footer-section ul li {
     margin-bottom: 10px;
+    line-height: 1.5;
 }
 
 .footer-section a {
     color: #cbd5e1;
     text-decoration: none;
-    transition: 0.3s;
+    transition: color 0.3s ease;
 }
 
 .footer-section a:hover {
     color: #ff4d6d;
 }
 
-/* ICON LINKS */
+
+/* =========================================================
+   ICONS
+   ========================================================= */
+
 .footer-section i {
     margin-right: 8px;
 }
 
-/* SOCIAL */
+
+/* =========================================================
+   SOCIAL
+   ========================================================= */
+
 .social-links {
     margin-top: 15px;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .social-links a {
-    display: inline-block;
-    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    margin: 0;
+
     font-size: 18px;
     color: #cbd5e1;
-    transition: 0.3s;
+
+    transition: all 0.3s ease;
 }
 
 .social-links a:hover {
     color: #ff4d6d;
+    transform: scale(1.2);
 }
 
-/* PAYMENT ICONS (if you add later) */
+
+/* =========================================================
+   PAYMENT ICONS
+   ========================================================= */
+
+.payment-icons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .payment-icons img {
     height: 30px;
-    margin-right: 10px;
-    margin-top: 10px;
+    max-width: 100%;
+    margin: 10px 0 0;
 }
 
-/* BOTTOM */
+
+/* =========================================================
+   FOOTER BOTTOM
+   ========================================================= */
+
 .footer-bottom {
+    width: 100%;
+    box-sizing: border-box;
+
     border-top: 1px solid #334155;
+
     margin-top: 40px;
     padding-top: 20px;
+
     text-align: center;
+
     font-size: 14px;
     color: #94a3b8;
+}
+
+.footer-bottom p {
+    margin: 5px 0;
 }
 
 .footer-bottom i {
     color: #ff4d6d;
 }
 
-.social-links a:hover {
-    color: #ff4d6d;
-    transform: scale(1.2);
+
+/* =========================================================
+   DESKTOP
+   1200px+
+   ========================================================= */
+
+@media screen and (min-width: 1200px) {
+
+    .footer-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 40px;
+    }
+
+}
+
+
+/* =========================================================
+   LAPTOP
+   992px - 1199px
+   ========================================================= */
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+
+    .footer-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 25px;
+    }
+
+    .footer-section h3 {
+        font-size: 19px;
+    }
+
+    .footer-section h4 {
+        font-size: 17px;
+    }
+
+    .footer-section p,
+    .footer-section a,
+    .footer-section li {
+        font-size: 14px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 991px
+   ========================================================= */
+
+@media screen and (max-width: 991px) and (min-width: 768px) {
+
+    .footer {
+        padding: 42px 0 22px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 35px 30px;
+    }
+
+}
+
+
+/* =========================================================
+   LARGE MOBILE
+   576px - 767px
+   ========================================================= */
+
+@media screen and (max-width: 767px) and (min-width: 576px) {
+
+    .footer {
+        padding: 40px 0 22px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px 25px;
+    }
+
+    .footer-section h3 {
+        font-size: 18px;
+    }
+
+    .footer-section h4 {
+        font-size: 16px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   431px - 575px
+   ========================================================= */
+
+@media screen and (max-width: 575px) and (min-width: 431px) {
+
+    .footer {
+        padding: 36px 0 20px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .footer-section p {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .footer-section ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        margin-top: 30px;
+    }
+
+}
+
+
+/* =========================================================
+   IPHONE 14 / 15 PRO MAX
+   376px - 430px
+   ========================================================= */
+
+@media screen and (max-width: 430px) {
+
+    .footer {
+        width: 100%;
+        padding: 34px 0 18px;
+        overflow: hidden;
+    }
+
+    /*
+       IMPORTANT:
+       Override the global .container width specifically
+       inside the footer.
+    */
+
+    .footer > .container {
+        width: 100%;
+        max-width: none !important;
+
+        margin-left: 0;
+        margin-right: 0;
+
+        padding-left: 16px;
+        padding-right: 16px;
+
+        box-sizing: border-box;
+    }
+
+    .footer-grid {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: minmax(0, 1fr) !important;
+
+        gap: 26px;
+
+        box-sizing: border-box;
+    }
+
+    .footer-section {
+        width: 100%;
+        min-width: 0;
+
+        text-align: center;
+
+        box-sizing: border-box;
+    }
+
+    .footer-section h3 {
+        font-size: 18px;
+    }
+
+    .footer-section h4 {
+        font-size: 16px;
+    }
+
+    .footer-section p,
+    .footer-section a,
+    .footer-section li {
+        font-size: 14px;
+    }
+
+    .footer-section p {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .footer-section ul {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section ul li {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        width: 100%;
+        margin-top: 28px;
+        padding-top: 17px;
+        font-size: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   375px AND BELOW
+   ========================================================= */
+
+@media screen and (max-width: 375px) {
+
+    .footer {
+        padding: 30px 0 18px;
+    }
+
+    .footer > .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .footer-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 23px;
+    }
+
+    .footer-section h3 {
+        font-size: 17px;
+    }
+
+    .footer-section h4 {
+        font-size: 15px;
+    }
+
+    .footer-section p,
+    .footer-section a,
+    .footer-section li {
+        font-size: 13px;
+    }
+
+    .social-links {
+        gap: 6px;
+    }
+
+    .social-links a {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .footer-bottom {
+        margin-top: 25px;
+        padding-top: 15px;
+        font-size: 12px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL
+   320px AND BELOW
+   ========================================================= */
+
+@media screen and (max-width: 320px) {
+
+    .footer > .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
 }
