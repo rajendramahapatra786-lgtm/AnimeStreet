@@ -295,17 +295,7 @@ Order History
 
 ---
 
-# 🚀 Future Enhancements
 
-- 💳 Online Payment Gateway
-- ⭐ Product Reviews
-- 🎁 Coupon System
-- 🔍 Advanced Search
-- 📊 Admin Analytics Dashboard
-- 📧 Email Notifications
-- 🤖 AI Product Recommendation
-
----
 
 # 👨‍💻 Author
 
