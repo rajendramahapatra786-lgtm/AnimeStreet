@@ -455,17 +455,58 @@ def remove_from_wishlist(request):
 @login_required
 def place_order(request):
     if request.method == 'POST':
-        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        # ==============================
+        # CHECK DELIVERY ADDRESS
+        # ==============================
+        profile, created = Profile.objects.get_or_create(
+            user=request.user
+        )
+
+        required_fields = {
+            'address': profile.address,
+            'city': profile.city,
+            'state': profile.state,
+            'pincode': profile.pincode,
+        }
+
+        missing_fields = [
+            field for field, value in required_fields.items()
+            if not value or not str(value).strip()
+        ]
+
+        if missing_fields:
+            return JsonResponse({
+                'success': False,
+                'address_missing': True,
+                'message': 'Please add your complete delivery address before placing the order.'
+            }, status=400)
+
+        # ==============================
+        # CART CHECK
+        # ==============================
+        cart, created = Cart.objects.get_or_create(
+            user=request.user
+        )
+
         cart_items = cart.items.select_related('product').all()
-        
+
         if not cart_items.exists():
-            return JsonResponse({'success': False, 'message': 'Cart is empty'})
-        
+            return JsonResponse({
+                'success': False,
+                'message': 'Cart is empty'
+            }, status=400)
+
+        # ==============================
+        # CALCULATE TOTAL
+        # ==============================
         subtotal = cart.get_total()
         tax = subtotal * Decimal('0.18')
         total = subtotal + tax
 
-        # ✅ FIXED: inside if block
+        # ==============================
+        # CREATE ORDER
+        # ==============================
         with transaction.atomic():
 
             order = Order.objects.create(
@@ -473,6 +514,7 @@ def place_order(request):
                 total_price=total,
                 status='pending'
             )
+
             send_order_email(order)
 
             for item in cart_items:
@@ -483,7 +525,7 @@ def place_order(request):
                     quantity=item.quantity,
                     price=item.product.price
                 )
-            
+
             cart.items.all().delete()
 
         return JsonResponse({
@@ -492,7 +534,10 @@ def place_order(request):
             'order_id': order.order_id
         })
 
-    return JsonResponse({'success': False, 'message': 'Invalid request'})
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request'
+    }, status=400)
 
 # ✅ COUNT API
 def wishlist_count(request):
