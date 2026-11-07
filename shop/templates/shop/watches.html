@@ -74,82 +74,84 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
 
-        const grid = document.getElementById('watchesGrid'); // change for bags
-        const sortSelect = document.getElementById('sortBy');
-        const resetBtn = document.getElementById('resetFilters');
+    // Store the original products permanently
+    const products = Array.from(
+        document.querySelectorAll('#watchesGrid .product-card')
+    );
 
-        let currentSort = 'default';
+    const grid = document.getElementById('watchesGrid');
+    const sortSelect = document.getElementById('sortBy');
+    const resetBtn = document.getElementById('resetFilters');
 
-        // ✅ GET PRODUCTS FRESH EVERY TIME
-        function getProducts() {
-            return Array.from(document.querySelectorAll('.product-card'));
+    let currentSort = 'default';
+
+
+    // ==============================
+    // RENDER PRODUCTS
+    // ==============================
+    function renderProducts() {
+
+        let sortedProducts = FilterUtils.sortProducts(
+            [...products],
+            currentSort
+        );
+
+        // Clear current grid
+        grid.innerHTML = '';
+
+        // No products
+        if (sortedProducts.length === 0) {
+            grid.innerHTML = '<div>No products found</div>';
+            return;
         }
 
-        // ✅ RENDER (CLONE SAFE)
-        function renderProducts() {
-            let products = getProducts();
-            let filtered = FilterUtils.sortProducts(products, currentSort);
+        // Add products back
+        sortedProducts.forEach(product => {
+            grid.appendChild(product);
+        });
+    }
 
-            grid.innerHTML = '';
 
-            if (filtered.length === 0) {
-                grid.innerHTML = '<div>No products found</div>';
-                return;
+    // ==============================
+    // SORT
+    // ==============================
+    if (sortSelect) {
+
+        sortSelect.addEventListener('change', function (e) {
+
+            currentSort = e.target.value;
+
+            renderProducts();
+        });
+    }
+
+
+    // ==============================
+    // RESET FILTERS
+    // ==============================
+    if (resetBtn) {
+
+        resetBtn.addEventListener('click', function () {
+
+            // Reset sort
+            currentSort = 'default';
+
+            // Reset dropdown
+            if (sortSelect) {
+                sortSelect.value = 'default';
             }
 
-            filtered.forEach(product => {
-                const clone = product.cloneNode(true);
-                grid.appendChild(clone);
-            });
-        }
-        // ✅ SORT
-        if (sortSelect) {
-            sortSelect.addEventListener('change', (e) => {
-                currentSort = e.target.value;
-                renderProducts();
-            });
-        }
-
-        // ✅ RESET
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                currentSort = 'default';
-                sortSelect.value = 'default';
-                renderProducts();
-            });
-        }
-
-        // ✅ NOTIFICATION
-        function showNotification(message, type) {
-            const n = document.createElement('div');
-            n.textContent = message;
-            n.style.cssText = `
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: ${type === 'success' ? 'green' : 'red'};
-            color: white;
-            padding: 10px;
-        `;
-            document.body.appendChild(n);
-            setTimeout(() => n.remove(), 3000);
-        }
-
-        // ✅ INIT
-        renderProducts();
-
-    });
+            // Render original products
+            renderProducts();
+        });
+    }
 
 
-    // ✅ STYLE FIX
-    const animationStyle = document.createElement('style');
-    animationStyle.textContent = `
-@keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-}`;
-    document.head.appendChild(animationStyle);
+    // Initial render
+    renderProducts();
+
+});
 </script>
 {% endblock %}
