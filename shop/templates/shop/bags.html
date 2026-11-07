@@ -76,7 +76,12 @@
 
 {% block extra_js %}
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Store the original product cards permanently
+    const products = Array.from(
+        document.querySelectorAll('#bagsGrid .product-card')
+    );
 
     const grid = document.getElementById('bagsGrid');
     const sortSelect = document.getElementById('sortBy');
@@ -84,43 +89,63 @@
 
     let currentSort = 'default';
 
-    function getProducts() {
-        return Array.from(document.querySelectorAll('.product-card'));
-    }
 
+    // ==============================
+    // RENDER PRODUCTS
+    // ==============================
     function renderProducts() {
-        let products = getProducts();
-        let filtered = FilterUtils.sortProducts(products, currentSort);
+
+        let sortedProducts = FilterUtils.sortProducts(
+            [...products],
+            currentSort
+        );
 
         grid.innerHTML = '';
 
-        if (filtered.length === 0) {
+        if (sortedProducts.length === 0) {
             grid.innerHTML = '<div>No products found</div>';
             return;
         }
 
-        filtered.forEach(p => {
-            const clone = p.cloneNode(true);
-            grid.appendChild(clone);
+        sortedProducts.forEach(product => {
+            grid.appendChild(product);
         });
     }
 
+
+    // ==============================
+    // SORT
+    // ==============================
     if (sortSelect) {
-        sortSelect.addEventListener('change', (e) => {
+        sortSelect.addEventListener('change', function (e) {
+
             currentSort = e.target.value;
+
             renderProducts();
         });
     }
 
+
+    // ==============================
+    // RESET FILTERS
+    // ==============================
     if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
+        resetBtn.addEventListener('click', function () {
+
             currentSort = 'default';
-            sortSelect.value = 'default';
+
+            if (sortSelect) {
+                sortSelect.value = 'default';
+            }
+
             renderProducts();
         });
     }
 
+
+    // Initial render
     renderProducts();
+
 });
 </script>
 {% endblock %}
