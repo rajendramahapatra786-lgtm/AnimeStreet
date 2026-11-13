@@ -4,7 +4,7 @@
 
 ### 🛍️ A Modern Anime-Themed E-Commerce Website Built with Django
 
-<img src="assets/banner.png" alt="AnimeStreet Banner" width="100%">
+<img src="shop/static/shop/images/banner/banner.png" alt="AnimeStreet Banner" width="100%">
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
 ![Django](https://img.shields.io/badge/Django-Framework-092E20?logo=django)
