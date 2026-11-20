@@ -19,13 +19,13 @@
         background: #ffffff;
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         transition: 0.3s;
     }
 
     .edit-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
     }
 
     .edit-title {
@@ -80,18 +80,16 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <input type="text" name="phone" placeholder="Phone"
-                    value="{{ profile.phone }}" class="form-control">
+                <input type="tel" name="phone" placeholder="10-digit phone number" value="{{ profile.phone }}"
+                    class="form-control" maxlength="10" pattern="[6-9][0-9]{9}" inputmode="numeric" required>
             </div>
 
             <div class="form-group">
-                <textarea name="address" placeholder="Address"
-                    class="form-control">{{ profile.address }}</textarea>
+                <textarea name="address" placeholder="Address" class="form-control">{{ profile.address }}</textarea>
             </div>
 
             <div class="form-group">
-                <input type="text" name="city" placeholder="City"
-                    value="{{ profile.city }}" class="form-control">
+                <input type="text" name="city" placeholder="City" value="{{ profile.city }}" class="form-control">
             </div>
 
             <div class="form-group">
@@ -130,8 +128,8 @@
             </div>
 
             <div class="form-group">
-                <input type="text" name="pincode" placeholder="Pincode"
-                    value="{{ profile.pincode }}" class="form-control">
+                <input type="text" name="pincode" placeholder="Pincode" value="{{ profile.pincode }}"
+                    class="form-control">
             </div>
 
             <button type="submit" class="save-btn">

@@ -17,6 +17,7 @@ from .forms import SignupForm
 from django.http import JsonResponse
 from .models import WishlistItem
 
+import re
 import random
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
@@ -584,20 +585,42 @@ def cart_ids(request):
     return JsonResponse({'ids': ids})
 
 
+@login_required
 def edit_profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == "POST":
-        profile.phone = request.POST.get("phone")
-        profile.address = request.POST.get("address")
-        profile.city = request.POST.get("city")
-        profile.state = request.POST.get("state")
-        profile.pincode = request.POST.get("pincode")
+
+        phone = request.POST.get("phone", "").strip()
+
+        # Phone validation
+        if not re.fullmatch(r"[6-9]\d{9}", phone):
+            messages.error(
+                request,
+                "Please enter a valid 10-digit phone number."
+            )
+            return render(
+                request,
+                "shop/edit_profile.html",
+                {"profile": profile}
+            )
+
+        profile.phone = phone
+        profile.address = request.POST.get("address", "").strip()
+        profile.city = request.POST.get("city", "").strip()
+        profile.state = request.POST.get("state", "").strip()
+        profile.pincode = request.POST.get("pincode", "").strip()
 
         profile.save()
-        return redirect("shop:profile")
-    return render(request, "shop/edit_profile.html", {"profile": profile})
 
+        messages.success(request, "Profile updated successfully!")
+        return redirect("shop:profile")
+
+    return render(
+        request,
+        "shop/edit_profile.html",
+        {"profile": profile}
+    )
 
 @staff_member_required
 def admin_orders(request):
