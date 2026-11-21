@@ -301,10 +301,9 @@ Order History
 
 **Rajendra Mahapatra**
 
-- GitHub: https://github.com/your-username
+- GitHub: https://github.com/rajendramahapatra786-lgtm
 - LinkedIn: https://linkedin.com/in/your-profile
 
----
 
 # ⭐ Support
 
